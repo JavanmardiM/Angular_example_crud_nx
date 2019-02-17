@@ -1,0 +1,27 @@
+<table class="table1">
+  <thead>
+    <tr>
+      <th>نام کاربری</th>
+      <th>نام و نام خانوادگی</th>
+      <th>کد ملی</th>
+      <th>شماره همراه</th>
+      <th>آدرس</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>tt</td>
+      <td>ttty</td>
+      <td>yyyy</td>
+      <td>yyyy</td>
+      <td>yyy</td>
+    </tr>
+    <tr *ngFor="let employee of employees">
+      <td>{{employee.username}}</td>
+      <td>{{employee.fullname}}</td>
+      <td>{{employee.nationalCode}}</td>
+      <td>{{employee.phoneNumber}}</td>
+      <td>{{employee.address}}</td>
+    </tr>
+  </tbody>
+</table>

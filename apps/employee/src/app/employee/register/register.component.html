@@ -1,0 +1,33 @@
+
+
+<div class="container">
+  <form class="register" #employeeRegisterForm [formGroup]="form">
+    <h3>ثبت نام </h3>
+    <h4 *ngIf="isRegistered === true">ثبت نام با موفقیت انجام شد.</h4>
+    <h4 class="error" *ngIf="isRegistered === false">ثبت نام قبلا انجام شده است.</h4>
+    <fieldset>
+      <input formControlName="username" placeholder="نام کاربری" type="text" tabindex="1" required autofocus
+       [ngClass]="{error: username.hasError('required') && username.touched}">
+      <p *ngIf="username.hasError('required') && username.touched">Username required.</p>
+    </fieldset>
+    <fieldset>
+      <input formControlName="fullname" placeholder="نام و نام خانوادگی" type="text" tabindex="2" required autofocus>
+    </fieldset>
+    <fieldset>
+      <input formControlName="nationalCode" placeholder="کد ملی" type="text" tabindex="3" required>
+    </fieldset>
+    <fieldset>
+      <input formControlName="phoneNumber" placeholder="شماره همراه" type="tel" tabindex="4" required>
+    </fieldset>
+
+    <fieldset>
+      <textarea formControlName="address" placeholder="آدرس" tabindex="5" required></textarea>
+    </fieldset>
+    <fieldset>
+      <button class="registerButtonSubmit" name="submit" type="button" (click)="save()">ثبت نام </button>
+    </fieldset>
+    <fieldset>
+      <button class="registerButton" name="btn" type="button">قبلا ثبت نام کرده ام</button>
+    </fieldset>
+  </form>
+</div>
