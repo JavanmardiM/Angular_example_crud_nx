@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
 import { EmployeeService, Employee } from '../services/employee.service';
+import { EmployeeDrawerService, CloseDrawerEvent } from '../services/employee-drawer.service';
 
 @Component({
   selector: 'app-register',
@@ -16,10 +17,11 @@ export class RegisterComponent implements OnInit {
   public get username() : FormControl {
     return this.form.get('username') as FormControl;
   }
-  
+
   constructor(
     formBuilder: FormBuilder,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private employeeDrawerService: EmployeeDrawerService
   ) {
     this.form = formBuilder.group({
       username: formBuilder.control('', [Validators.required]),
@@ -27,7 +29,7 @@ export class RegisterComponent implements OnInit {
       nationalCode: ['', [Validators.required]],
       phoneNumber: ['', [Validators.required]],
       address: [''],
-      
+
     });
   }
 
@@ -56,5 +58,10 @@ export class RegisterComponent implements OnInit {
           }
         );
     }
+  }
+  cancel(): void {
+    this.employeeDrawerService.changeDrawerState(
+      new CloseDrawerEvent()
+    );
   }
 }

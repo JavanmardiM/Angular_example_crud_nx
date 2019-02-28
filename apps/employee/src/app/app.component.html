@@ -1,6 +1,22 @@
+<div dir="rtl">
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
 
-<div style="text-align:center">
-  <app-register></app-register>
-  <app-employees></app-employees>
-   </div>
-  
+  سازمان
+</mat-toolbar>
+
+<mat-sidenav-container class="example-container" dir="rtl">
+  <mat-sidenav mode="side" #sidenav position="start">
+    <ul class="sideNav" fxLayout="column" fxLayoutGap="10px">
+      <li>منو 1</li>
+      <li>منو 2</li>
+    </ul>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <angular-nx-attendance></angular-nx-attendance>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+</div>

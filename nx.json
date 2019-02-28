@@ -13,6 +13,15 @@
     },
     "employee-e2e": {
       "tags": []
+    },
+    "persian-datepciker": {
+      "tags": []
+    },
+    "app1": {
+      "tags": []
+    },
+    "app1-e2e": {
+      "tags": []
     }
   }
 }
