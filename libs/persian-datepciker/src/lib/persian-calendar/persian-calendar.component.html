@@ -1,0 +1,45 @@
+<mat-card [@slideContent]="animationState"
+          (@slideContent.start)="onAnimationStart($event)"
+          (@slideContent.done)="onAnimationDone($event)"
+          dir="rtl"
+          cdkTrapFocus>
+    <mat-card-content>
+        <div fxLayout="row" fxLayoutGap="10px"  class="full-width">
+            <button cdkFocusRegionStart mat-icon-button (click)="previous()" matTooltip="ماه قبل" matTooltipPosition="before">
+                <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+            <mat-form-field>
+                <mat-select placeholder="ماه" [(value)]="month" cdkFocusInitial>
+                    <mat-option *ngFor="let monthName of monthNames; let i = index" [value]="i + 1">
+                      {{monthName}}
+                    </mat-option>
+                </mat-select>    
+            </mat-form-field>
+            <mat-form-field>
+                <mat-select placeholder="سال" [(value)]="year">
+                    <mat-option *ngFor="let year of years" [value]="year">
+                      {{year}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <button cdkFocusRegionEnd mat-icon-button (click)="next()" matTooltip="ماه بعد" matTooltipPosition="after">
+                <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+        </div>
+        <mat-grid-list cols="7" rowHeight="1:1">
+            <mat-grid-tile *ngFor="let weekDay of weekDays">{{weekDay}}</mat-grid-tile>
+        </mat-grid-list>
+        <mat-divider></mat-divider>
+        <mat-grid-list cols="7" rowHeight="1:1">
+            <mat-grid-tile [colspan]="daysOffset"></mat-grid-tile>
+            <mat-grid-tile *ngFor="let date of dates; let i = index">
+                <button mat-icon-button (click)="selectDate(date)"
+                    class="date-item"
+                    [class.mat-stroked-button]="todayDate === date"
+                    [class.mat-flat-button]="selectedDate === date"
+                    [color]="selectedDate === date ? 'primary' : ''">{{i+1}}</button>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="remainDays % 7" [rowspan]="remainDays % 7 === remainDays ? 1 : 2"></mat-grid-tile>
+        </mat-grid-list>
+    </mat-card-content>
+</mat-card>

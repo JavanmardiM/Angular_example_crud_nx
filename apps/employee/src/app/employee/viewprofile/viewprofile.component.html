@@ -1,0 +1,52 @@
+<div>
+  <div fxLayout="row">
+    <span  class="mat-title" >اطلاعات پرسنلی</span>
+    <span fxFlex></span>
+    <div><button mat-raised-button color="primary" (click)="onEditViaOutput()">ویرایش اطلاعات</button></div>
+  </div>
+  <mat-list role="list" color="accent">
+    <mat-list-item role="listitem">
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="60" fxLayoutGap="10px">
+        <mat-icon>assignment_ind</mat-icon>
+        <span>کد پرسنلی :</span>
+      </div>
+      <span fxLayout="row" fxFlex="40">{{ employee.code }}</span>
+    </mat-list-item>
+
+    <mat-list-item role="listitem">
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="60" fxLayoutGap="10px">
+        <mat-icon>how_to_reg</mat-icon>
+        <span>نام و نام خانوادگی : </span>
+      </div>
+      <span fxLayout="row" fxFlex="40">{{ employee.fullname }}</span>
+    </mat-list-item>
+
+    <mat-list-item role="listitem">
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="60" fxLayoutGap="10px">
+        <mat-icon>face</mat-icon>
+        <span> کد ملی :</span>
+      </div>
+      <span fxLayout="row" fxFlex="40">{{ employee.nationalcode }}</span>
+    </mat-list-item>
+
+    <mat-list-item role="listitem">
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="60" fxLayoutGap="10px">
+        <mat-icon>phone</mat-icon>
+        <span> شماره همراه : </span>
+      </div>
+      <span fxLayout="row" fxFlex="40">{{ employee.phonenumber }}</span>
+    </mat-list-item>
+
+    <mat-list-item role="listitem">
+      <div fxLayout="row" fxLayoutAlign="start center" fxFlex="60" fxLayoutGap="10px">
+        <mat-icon>location_on</mat-icon>
+        <span> آدرس : </span>
+      </div>
+      <span fxLayout="row" fxFlex="40">{{ employee.address }}</span>
+    </mat-list-item>
+  </mat-list>
+  <div fxLayout="column" fxLayoutAlign="end ">
+    <span fxFlex></span>
+
+  </div>
+</div>
