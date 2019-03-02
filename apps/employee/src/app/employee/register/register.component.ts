@@ -14,9 +14,19 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   isRegistered?: boolean;
 
-  public get username() : FormControl {
-    return this.form.get('username') as FormControl;
+  public get fullname() : FormControl {
+    return this.form.get('fullname') as FormControl;
   }
+  public get nationalCode() : FormControl {
+    return this.form.get('nationalCode') as FormControl;
+  }
+  public get mobileNumber() : FormControl {
+    return this.form.get('mobileNumber') as FormControl;
+  }
+  public get address() : FormControl {
+    return this.form.get('address') as FormControl;
+  }
+
 
   constructor(
     formBuilder: FormBuilder,
@@ -24,28 +34,19 @@ export class RegisterComponent implements OnInit {
     private employeeDrawerService: EmployeeDrawerService
   ) {
     this.form = formBuilder.group({
-      username: formBuilder.control('', [Validators.required]),
-      fullname: ['', Validators.required],
+      fullname: formBuilder.control('', [Validators.required]),
       nationalCode: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required]],
-      address: [''],
+      mobileNumber: ['', [Validators.required]],
+      address: ['',[Validators.required]],
 
     });
   }
 
   ngOnInit(): void {
-    this.employeeService.getUsers().subscribe(
-      users => console.log(users),
-      err => console.log(err)
-    );
+
   }
 
   save(): void {
-    // this.employeeService.createUser().subscribe(
-    //   _ => console.log('user was created.'),
-    //   err => console.log('An error occurred when creating user.', err)
-    // );
-
     if(this.form.valid) {
       const employee: Employee = this.form.value;
       this.employeeService.registerEmployee(employee)

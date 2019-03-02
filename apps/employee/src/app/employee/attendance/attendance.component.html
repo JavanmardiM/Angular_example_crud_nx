@@ -6,7 +6,13 @@
         <mat-icon>cancel</mat-icon>
       </button>
     </div>
-    <div *ngIf="flag === 'register'"><app-register></app-register></div>
+    <div
+      fxLayout="row"
+      fxLayoutAlign="center center"
+      *ngIf="flag === 'register'"
+    >
+      <app-register fxFlex="80"></app-register>
+    </div>
     <div
       *ngIf="flag === 'profile'"
       fxLayout="row"
@@ -17,9 +23,10 @@
         (flagViaOutput)="flagChange($event)"
       ></angular-nx-viewprofile>
     </div>
-    <div *ngIf="flag === 'edit'">
+    <div  fxLayout="row"
+    fxLayoutAlign="center center" *ngIf="flag === 'edit'">
       <angular-nx-editprofile
-        fxFlex="80"
+        fxFlex="90"
         (cancelEdit)="flagChange($event)"
       ></angular-nx-editprofile>
     </div>
@@ -55,11 +62,10 @@
       </div>
 
       <mat-card-content>
-        <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxLayout="row" fxLayout.lt-md="column">
           <mat-form-field>
             <tav-persian-datepicker
               fxLayout="row"
-              fxFlex="80"
               #picker
               [(ngModel)]="today"
               placeholder="انتخاب تاریخ"
@@ -92,7 +98,7 @@
             </button>
           </div>
         </div>
-        <div class="mat-body-strong">
+        <div class="mat-body-strong" [style.overflow]="'auto'">
           <table
             mat-table
             matSort
@@ -168,13 +174,13 @@
               <th mat-header-cell *matHeaderCellDef>عملیات</th>
               <td mat-cell *matCellDef="let element">
                 <div fxLayout="row" fxLayoutGap="5px">
-                  <button
+                  <!-- <button
                     mat-raised-button
                     color="primary"
                     (click)="onexitconfirm()"
                   >
                     ثبت خروج
-                  </button>
+                  </button> -->
                   <button
                     mat-raised-button
                     color="accent"

@@ -5,43 +5,67 @@
   ثبت نام قبلا انجام شده است.
 </h4>
 
-<form #employeeRegisterForm [formGroup]="form">
-  <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
-    <mat-form-field appearance="outline">
-      <mat-label>نام کاربری</mat-label>
-      <input
-        matInput
-        formControlName="username"
-        placeholder="نام کاربری"
-        type="text"
-        tabindex="1"
-        required
-        autofocus
-        [ngClass]="{ error: username.hasError('required') && username.touched }"
-      />
-    </mat-form-field>
-    <p *ngIf="username.hasError('required') && username.touched">
-     نام کاربری را وارد نمایید.
-    </p>
+<form fxLayout="column" #employeeRegisterForm [formGroup]="form">
 
-    <mat-form-field appearance="outline">
-      <mat-label>نام و نام خانوادگی </mat-label>
-      <input matInput placeholder="نام ونام خانوادگی" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>کد ملی </mat-label>
-      <input matInput placeholder="کد ملی" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>شماره همراه </mat-label>
-      <input matInput placeholder="شماره همراه" />
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>آدرس </mat-label>
-      <input matInput placeholder="آدرس" />
-    </mat-form-field>
-  </div>
-  <div fxLayout="row" fxLayoutAlign="center start" fxLayoutGap="10px" [style.padding.px]="50" >
+  <mat-form-field appearance="standard">
+    <mat-label>نام و نام خانوادگی </mat-label>
+    <input
+      matInput
+      placeholder="نام ونام خانوادگی"
+      formControlName="fullname"
+      type="text"
+      tabindex="1"
+      required
+      autofocus
+      [ngClass]="{ error: fullname.hasError('required') && fullname.touched }"
+    />
+  </mat-form-field>
+  <p *ngIf="fullname.hasError('required') && fullname.touched">
+    نام کاربری را وارد نمایید.
+  </p>
+  <mat-form-field>
+    <mat-label>کد ملی </mat-label>
+    <input
+      matInput
+      placeholder="کد ملی"
+      formControlName="nationalCode"
+      type="number"
+      tabindex="2"
+      required
+      [ngClass]="{ error: nationalCode.hasError('required') && nationalCode.touched }"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="standard">
+    <mat-label>شماره همراه </mat-label>
+    <input
+      matInput
+      placeholder="شماره همراه"
+      formControlName="mobileNumber"
+      type="text"
+      tabindex="3"
+      required
+      [ngClass]="{ error: mobileNumber.hasError('required') && mobileNumber.touched }"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="standard">
+    <mat-label>آدرس </mat-label>
+    <input
+      matInput
+      placeholder="آدرس"
+      formControlName="address"
+      type="text"
+      tabindex="4"
+      required
+      [ngClass]="{ error: address.hasError('required') && address.touched }"
+    />
+  </mat-form-field>
+
+  <div
+    fxLayout="row"
+    fxLayoutAlign="center start"
+    fxLayoutGap="10px"
+    [style.padding.px]="50"
+  >
     <button type="submit" mat-raised-button color="primary" (click)="save()">
       ثبت
     </button>
