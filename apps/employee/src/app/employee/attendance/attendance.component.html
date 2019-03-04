@@ -67,7 +67,8 @@
             <tav-persian-datepicker
               fxLayout="row"
               #picker
-              [(ngModel)]="today"
+              [(ngModel)]="selectedDate"
+              (ngModelChange)="onDateChange($event)"
               placeholder="انتخاب تاریخ"
             ></tav-persian-datepicker>
             <tav-persian-datepicker-toggle
@@ -86,10 +87,9 @@
           <div fxLayoutGap="10px">
             <mat-form-field appearance="standard">
               <mat-label>جستجو </mat-label>
-              <input
+              <input #input
                 matInput
                 placeholder="جستجو"
-                (keyup)="applyFilter($event.target.value)"
               />
             </mat-form-field>
             <button mat-raised-button color="primary" (click)="onReg()">
@@ -98,12 +98,15 @@
             </button>
           </div>
         </div>
-        <div class="mat-body-strong" [style.overflow]="'auto'">
+        <div class="mat-body-strong employees-container" [style.overflow]="'auto'">
+          <!-- <div class="loading-container" *ngIf="employeesDatasource.loading$ | async">
+            <mat-spinner></mat-spinner>
+          </div> -->
           <table
             mat-table
             matSort
-            [dataSource]="dataSource"
-            [style.width.%]="100"
+            [dataSource]="employeesDatasource"
+            matSortDirection="asc"
           >
             <!--
               - Note that these columns can be defined in any order.
@@ -113,56 +116,56 @@
             <!-- number Column -->
             <ng-container matColumnDef="number">
               <th mat-header-cell *matHeaderCellDef>شماره</th>
-              <td mat-cell *matCellDef="let element">
+              <td mat-cell *matCellDef="let row; let i = index">
                 <button mat-button (click)="profile()">
-                  {{ element.number }}
+                  {{ i + 1 }}
                 </button>
               </td>
             </ng-container>
 
             <!-- Name Column -->
-            <ng-container matColumnDef="code">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="employeeId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortHeaderClick('employeeId')" >
                 کد پرسنلی
               </th>
-              <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.employeeId }}</td>
             </ng-container>
 
             <!-- Weight Column -->
             <ng-container matColumnDef="fullname">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortHeaderClick('fullname')" >
                 نام و نام خانوادگی
               </th>
-              <td mat-cell *matCellDef="let element">{{ element.fullname }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>تاریخ</th>
-              <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortHeaderClick('date')" >تاریخ</th>
+              <td mat-cell *matCellDef="let row">{{ row.date }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
-            <ng-container matColumnDef="timein">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="enterTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortHeaderClick('enterTime')" >
                 ساعت ورود
               </th>
-              <td mat-cell *matCellDef="let element">{{ element.timein }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.enterTime }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
-            <ng-container matColumnDef="timeout">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            <ng-container matColumnDef="exitTime">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header (click)="sortHeaderClick('exitTime')" >
                 ساعت خروج
               </th>
-              <td mat-cell *matCellDef="let element">{{ element.timeout }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.exitTime }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
             <ng-container matColumnDef="des">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>توضیحات</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.des }}
+              <th mat-header-cell *matHeaderCellDef  >توضیحات</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.description }}
                 <button mat-icon-button (click)="desc()">
                   <mat-icon>keyboard_arrow_left</mat-icon>
                 </button>

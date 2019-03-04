@@ -1,7 +1,16 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray, FormControl } from "@angular/forms";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  FormArray,
+  FormControl
+} from '@angular/forms';
 import { EmployeeService, Employee } from '../services/employee.service';
-import { EmployeeDrawerService, CloseDrawerEvent } from '../services/employee-drawer.service';
+import {
+  EmployeeDrawerService,
+  CloseDrawerEvent
+} from '../services/employee-drawer.service';
 
 @Component({
   selector: 'app-register',
@@ -14,17 +23,8 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   isRegistered?: boolean;
 
-  public get fullname() : FormControl {
+  public get fullname(): FormControl {
     return this.form.get('fullname') as FormControl;
-  }
-  public get nationalCode() : FormControl {
-    return this.form.get('nationalCode') as FormControl;
-  }
-  public get mobileNumber() : FormControl {
-    return this.form.get('mobileNumber') as FormControl;
-  }
-  public get address() : FormControl {
-    return this.form.get('address') as FormControl;
   }
 
 
@@ -37,32 +37,32 @@ export class RegisterComponent implements OnInit {
       fullname: formBuilder.control('', [Validators.required]),
       nationalCode: ['', [Validators.required]],
       mobileNumber: ['', [Validators.required]],
-      address: ['',[Validators.required]],
-
+      address: ['', [Validators.required]]
     });
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   save(): void {
-    if(this.form.valid) {
+    if (this.form.valid) {
       const employee: Employee = this.form.value;
-      this.employeeService.registerEmployee(employee)
-        .subscribe(
-          _ => {
-            console.log('employee registered.')
-          },
-          (err) => {
-            console.log('An error occurred when registring an employee.', err);
-          }
-        );
+      this.employeeService.registerEmployee(employee).subscribe(
+        code => {
+          console.log('employee registered.');
+
+          alert(
+            'کاربر با شماره پرسنلی' + ' ' + code + ' ' + 'در سیستم ثبت شد.'
+          );
+          this.form.reset();
+        },
+        err => {
+          alert('خطا رخ داد.');
+          console.log('An error occurred when registring an employee.', err);
+        }
+      );
     }
   }
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(
-      new CloseDrawerEvent()
-    );
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent());
   }
 }
