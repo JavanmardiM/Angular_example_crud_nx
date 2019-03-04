@@ -6,7 +6,6 @@
 </h4>
 
 <form fxLayout="column" #employeeRegisterForm [formGroup]="form">
-
   <mat-form-field appearance="standard">
     <mat-label>نام و نام خانوادگی </mat-label>
     <input
@@ -20,7 +19,10 @@
       [ngClass]="{ error: fullname.hasError('required') && fullname.touched }"
     />
   </mat-form-field>
-  <p *ngIf="fullname.hasError('required') && fullname.touched">
+  <p
+    class="showError"
+    *ngIf="fullname.hasError('required') && fullname.touched"
+  >
     نام کاربری را وارد نمایید.
   </p>
   <mat-form-field>
@@ -32,9 +34,14 @@
       type="number"
       tabindex="2"
       required
-      [ngClass]="{ error: nationalCode.hasError('required') && nationalCode.touched }"
     />
   </mat-form-field>
+  <p
+    class="showError"
+    *ngIf="!form.get('nationalCode').valid && form.get('nationalCode').touched"
+  >
+    کد ملی را وارد نمایید.
+  </p>
   <mat-form-field appearance="standard">
     <mat-label>شماره همراه </mat-label>
     <input
@@ -44,9 +51,14 @@
       type="text"
       tabindex="3"
       required
-      [ngClass]="{ error: mobileNumber.hasError('required') && mobileNumber.touched }"
     />
   </mat-form-field>
+  <p
+    class="showError"
+    *ngIf="!form.get('mobileNumber').valid && form.get('mobileNumber').touched"
+  >
+     شماره همراه را وارد نمایید.
+  </p>
   <mat-form-field appearance="standard">
     <mat-label>آدرس </mat-label>
     <input
@@ -56,10 +68,14 @@
       type="text"
       tabindex="4"
       required
-      [ngClass]="{ error: address.hasError('required') && address.touched }"
     />
   </mat-form-field>
-
+  <p
+    class="showError"
+    *ngIf="!form.get('address').valid && form.get('address').touched"
+  >
+    آدرس را وارد نمایید.
+  </p>
   <div
     fxLayout="row"
     fxLayoutAlign="center start"

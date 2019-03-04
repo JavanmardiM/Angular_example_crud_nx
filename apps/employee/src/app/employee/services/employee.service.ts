@@ -3,26 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 //  const API_URL ='http://192.168.1.155';
-const API_URL ='http://localhost:8080';
+const API_URL = 'http://localhost:8080';
 
 @Injectable()
 export class EmployeeService {
-
   constructor(private http: HttpClient) {}
 
-  sendRequest(option?: EmployeeListOpion): Observable<Employee[]> {
-    option = option || NullEmployeeListOption;
-    return this.http.post<Employee[]>(`${API_URL}/list`, option);
+  sendRequest(option?: EmployeeListOpion): Observable<EmployeeList[]> {
+    option = option || EmptyEmployeeListOption;
+    return this.http.post<EmployeeList[]>(`${API_URL}/list`, option);
   }
 
   registerEmployee(employee: Employee): Observable<any> {
-
-    // this.getEmployees().subscribe(employees => console.log(employees));
-
-      return this.http.post(`${API_URL}/postEmployee`, employee);
+    return this.http.post(`${API_URL}/postEmployee`, employee);
   }
-
-
 }
 
 export interface Employee {
@@ -31,19 +25,33 @@ export interface Employee {
   mobileNumber: string;
   address: string;
 }
+export interface EmployeeList {
+  employeeId: number;
+  fullName: string;
+  date: string;
+  enterTime: string;
+  exitTime: string;
+  description: string[];
+  isAbsence: boolean;
+}
+
+export interface Sort {
+  [key: string]: string;
+}
 
 export interface EmployeeListOpion {
-date?: string;
-search?: string;
-sortOption?: Map<string, SortDirection>;
+  date?: string;
+  search?: string;
+  sortOption?: Sort;
 }
 
-const NullEmployeeListOption: EmployeeListOpion = {
-date: null,
-search: null,
-sortOption: new Map<string, SortDirection>()
-}
+export const EmptyEmployeeListOption: EmployeeListOpion = {
+  date: null,
+  search: null,
+  sortOption: {}
+};
 
-export enum SortDirection {
-ASC, DESC
-}
+// export enum SortDirection {
+//   asc,
+//   desc
+// }

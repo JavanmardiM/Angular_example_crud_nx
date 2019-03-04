@@ -8,7 +8,6 @@ import { MaterialEmployeeModule } from './material.employee.module';
 
 import { RegisterComponent } from './register/register.component';
 import { EmployeeService } from './services/employee.service';
-import { EmployeesComponent } from './employees/employees.component';
 import {
   AttendanceComponent,
   MatPaginatorIntlCro
@@ -27,7 +26,6 @@ import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
 @NgModule({
   declarations: [
     RegisterComponent,
-    EmployeesComponent,
     AttendanceComponent,
     ViewprofileComponent,
     EditprofileComponent,
@@ -52,7 +50,6 @@ import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
   ],
   exports: [
     RegisterComponent,
-    EmployeesComponent,
     AttendanceComponent,
     ViewprofileComponent,
     EnterconfirmComponent,

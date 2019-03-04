@@ -1,4 +1,17 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  EmployeeService,
+  EmployeeListOpion,
+  EmptyEmployeeListOption,
+  EmployeeList,
+  Sort
+} from './../services/employee.service';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
+} from '@angular/core';
 import {
   MatPaginator,
   MatSort,
@@ -10,181 +23,10 @@ import {
   EmployeeDrawerService,
   DataService
 } from '../services/employee-drawer.service';
-import moment from'moment-jalaali';
-
-export interface PeriodicElement {
-  number: string;
-  code: string;
-  fullname: string;
-  date: string;
-  timein: string;
-  timeout: string;
-  des: string;
-  opration: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    number: '1',
-    code: 'alavi',
-    fullname: '1.0079',
-    date: 'H',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '2',
-    code: 'mandegari',
-    fullname: '1.0079',
-    date: 'He',
-    timein: 'H',
-    timeout: 'H',
-    des: 't',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'namvar',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: '4',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'soltani',
-    fullname: '1.0079',
-    date: '3',
-    timein: 'H',
-    timeout: 'H',
-    des: 'a',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'akbari',
-    fullname: '1.0079',
-    date: '2',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '5',
-    code: 'niazi',
-    fullname: '1.0079',
-    date: '1',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'eslami',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'sadeghi',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'falahi',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'ebrahumi',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'y',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'y',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'y',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'y',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'y',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  },
-  {
-    number: '3',
-    code: 'y',
-    fullname: '1.0079',
-    date: 'Li',
-    timein: 'H',
-    timeout: 'H',
-    des: 'H',
-    opration: 'H'
-  }
-];
+import moment from 'moment-jalaali';
+import { EmployeeDatasource } from './employees.datasource';
+import { fromEvent, merge } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
 
 type ViewFlag =
   | null
@@ -201,7 +43,7 @@ type ViewFlag =
   templateUrl: './attendance.component.html',
   styleUrls: ['./attendance.component.scss']
 })
-export class AttendanceComponent implements OnInit {
+export class AttendanceComponent implements OnInit, AfterViewInit {
   @ViewChild('sidecontent')
   public set drawer(drawer: MatDrawer) {
     this._drawer = drawer;
@@ -210,36 +52,47 @@ export class AttendanceComponent implements OnInit {
     return this._drawer;
   }
 
+  columnName = 'employeeId';
+  sortDir: string;
+
   private _drawer: MatDrawer;
 
-  today:string=moment().format('jYYYY/jM/jDD');
+  employeesDatasource: EmployeeDatasource;
+
+  selectedDate: string = moment().format('jYYYY/jM/jDD');
 
   flag: ViewFlag = null;
   displayedColumns: string[] = [
     'number',
-    'code',
+    'employeeId',
     'fullname',
     'date',
-    'timein',
-    'timeout',
+    'enterTime',
+    'exitTime',
     'des',
     'opration'
   ];
-  dataSource: MatTableDataSource<PeriodicElement>;
+  dataSource: MatTableDataSource<EmployeeList>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('input') input: ElementRef;
+
+  employeeListOption: EmployeeListOpion = EmptyEmployeeListOption;
 
   constructor(
+    private employeeService: EmployeeService,
     private employeeDrawerService: EmployeeDrawerService,
     private data: DataService
   ) {
-    this.dataSource = new MatTableDataSource(ELEMENT_DATA);
+    // this.dataSource = new MatTableDataSource(ELEMENT_DATA);
   }
 
   ngOnInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
+
+    this.employeesDatasource = new EmployeeDatasource(this.employeeService);
 
     this.employeeDrawerService.drawerClosed().subscribe(closedEvent => {
       this._drawer.close();
@@ -251,17 +104,116 @@ export class AttendanceComponent implements OnInit {
       .subscribe(opendEvent => this._drawer.open());
 
     this.data.currentFlag.subscribe(flag => (this.flag = flag));
+
+    const date = moment(this.selectedDate, 'jYYYY/jMM/jDD').format(
+      'YYYY/MM/DD'
+    );
+    this.getEmployees({ date: date });
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  ngAfterViewInit() {
+    const date = moment(this.selectedDate, 'jYYYY/jMM/jDD').format(
+      'YYYY/MM/DD'
+    );
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    // server-side search
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => {
+          this.paginator.pageIndex = 0;
+          this.getEmployees({
+            date: date,
+            search: this.input.nativeElement.value
+          });
+        })
+      )
+      .subscribe();
+
+    // reset the paginator after sorting
+    this.sort.sortChange.subscribe(
+      () => (this.paginator.pageIndex = 0),
+      (this.sortDir = this.sort.direction)
+    );
+
+    // this.sortOption[this.columnName] = this.sortDir;
+    // on sort or paginate events, load a new page
+    // merge(this.sort.sortChange, this.paginator.page)
+    //   .pipe(
+    //     tap(() =>
+    //       this.getEmployees({
+    //         date: date,
+    //         sortOption: this.sortOption
+    //       })
+    //     )
+    //   )
+    //   .subscribe(_ => {});
+
+  }
+
+  sortHeaderClick(headerName: string) {
+    const date = moment(this.selectedDate, 'jYYYY/jMM/jDD').format(
+      'YYYY/MM/DD'
+    );
+
+
+    if (headerName) {
+      this.columnName = headerName;
+      this.sortDir = this.sort.direction;
+
+      this.sortDir =
+        this.sort.direction === null || this.sort.direction === ''
+          ? 'asc'
+          : this.sort.direction;
+
+          const sortOpt: Sort = {};
+          sortOpt[this.columnName] = this.sortDir;
+
+      this.getEmployees({
+        date: date,
+        sortOption: sortOpt
+      });
     }
   }
-  gotoToday(){
-    this.today=moment().format('jYYYY/jM/jDD');
+
+  getEmployees(option: EmployeeListOpion) {
+    // console.log(option);
+
+
+    this.employeesDatasource.loadEmployees(option);
+
+    // this.employeeService.sendRequest(option).subscribe(
+    //   employees =>{
+    //    // console.log(employees);
+    //   //this.employeesDatasource = new EmployeeDatasource(employees);
+    //    this.dataSource = new MatTableDataSource(employees);
+    //   }
+    // );
+  }
+
+  prevDate: string;
+  onDateChange(newDate) {
+    if (this.prevDate !== newDate) {
+      // console.log(newDate);
+      this.prevDate = newDate;
+
+      const date = moment(newDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD');
+      this.getEmployees({ date: date });
+    }
+  }
+
+  // applyFilter(filterValue: string) {
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+
+  //   if (this.dataSource.paginator) {
+  //     this.dataSource.paginator.firstPage();
+  //   }
+  // }
+  //////---- html code for input --------///(keyup)="applyFilter($event.target.value)"
+
+  gotoToday() {
+    this.selectedDate = moment().format('jYYYY/jM/jDD');
   }
 
   onexitconfirm() {

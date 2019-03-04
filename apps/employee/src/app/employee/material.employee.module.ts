@@ -9,7 +9,8 @@ import {
   MatListModule,
   MatCardModule,
   MatFormFieldModule,
-  MatSortModule
+  MatSortModule,
+  MatProgressSpinnerModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -26,7 +27,8 @@ const includeModules = [
   MatListModule,
   MatCardModule,
   MatFormFieldModule,
-  MatSortModule
+  MatSortModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({
