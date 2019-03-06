@@ -1,8 +1,8 @@
 <mat-drawer-container class="example-container">
-  <mat-drawer mode="push" #sidecontent [style.width.px]="500">
+  <mat-drawer mode="push" #sidecontent (closedStart)="closedStart()" [style.width.px]="500">
     <div>
       <span fxFlex></span>
-      <button mat-icon-button (click)="cancel()">
+      <button mat-icon-button (click)="cancel()" tabindex="-1">
         <mat-icon>cancel</mat-icon>
       </button>
     </div>
@@ -35,7 +35,7 @@
       fxLayout="row"
       fxLayoutAlign="center center"
     >
-      <angular-nx-enterconfirm fxFlex="100"></angular-nx-enterconfirm>
+      <angular-nx-enterconfirm [employeeID]="employeeID" [fullName]="fullName" fxFlex="100"></angular-nx-enterconfirm>
     </div>
     <div
       *ngIf="flag === 'exitconfirm'"
@@ -161,7 +161,7 @@
               >
                 تاریخ
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.date | persianDate }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -204,7 +204,7 @@
             <!-- Symbol Column -->
             <ng-container matColumnDef="opration">
               <th mat-header-cell *matHeaderCellDef>عملیات</th>
-              <td mat-cell *matCellDef="let element">
+              <td mat-cell *matCellDef="let row">
                 <div fxLayout="row" fxLayoutGap="5px">
                   <!--
                     <button
@@ -218,11 +218,11 @@
                   <button
                     mat-raised-button
                     color="accent"
-                    (click)="onenterconfirm()"
+                    (click)="onenterconfirm(row)"
                   >
                     ثبت ورود
                   </button>
-                  <button mat-raised-button (click)="onabsence()">
+                  <button mat-raised-button (click)="onabsence(row)">
                     ثبت غیبت
                   </button>
                 </div>

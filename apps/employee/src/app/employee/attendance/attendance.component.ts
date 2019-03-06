@@ -52,21 +52,20 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   public get drawer(): MatDrawer {
     return this._drawer;
   }
-
-  columnName :string;
-  sortDir: string;
-
   private _drawer: MatDrawer;
 
+  columnName: string;
+  sortDir: string;
   employeesDatasource: EmployeeDatasource;
-
   employeeID: number;
-
+  fullName :string;
   selectedDate: string = moment().format('jYYYY/jM/jDD');
-
+  employeeListOption: EmployeeListOpion = EmptyEmployeeListOption;
   flag: ViewFlag = null;
+  dataSource: MatTableDataSource<EmployeeList>;
+
   displayedColumns: string[] = [
-    'number',
+  'number',
     'employeeId',
     'fullname',
     'date',
@@ -75,26 +74,19 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     'des',
     'opration'
   ];
-  dataSource: MatTableDataSource<EmployeeList>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('input') input: ElementRef;
 
-  employeeListOption: EmployeeListOpion = EmptyEmployeeListOption;
 
   constructor(
     private employeeService: EmployeeService,
     private employeeDrawerService: EmployeeDrawerService,
     private data: DataService
-  ) {
-    // this.dataSource = new MatTableDataSource(ELEMENT_DATA);
-  }
+  ) {}
 
   ngOnInit() {
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
-
     this.employeesDatasource = new EmployeeDatasource(this.employeeService);
 
     this.employeeDrawerService.drawerClosed().subscribe(closedEvent => {
@@ -139,19 +131,6 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
       () => (this.paginator.pageIndex = 0),
       (this.sortDir = this.sort.direction)
     );
-
-    // this.sortOption[this.columnName] = this.sortDir;
-    // on sort or paginate events, load a new page
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     tap(() =>
-    //       this.getEmployees({
-    //         date: date,
-    //         sortOption: this.sortOption
-    //       })
-    //     )
-    //   )
-    //   .subscribe(_ => {});
   }
 
   sortHeaderClick(headerName: string) {
@@ -179,17 +158,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   }
 
   getEmployees(option: EmployeeListOpion) {
-    // console.log(option);
-
     this.employeesDatasource.loadEmployees(option);
-
-    // this.employeeService.sendRequest(option).subscribe(
-    //   employees =>{
-    //    // console.log(employees);
-    //   //this.employeesDatasource = new EmployeeDatasource(employees);
-    //    this.dataSource = new MatTableDataSource(employees);
-    //   }
-    // );
   }
 
   prevDate: string;
@@ -203,15 +172,6 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // applyFilter(filterValue: string) {
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-
-  //   if (this.dataSource.paginator) {
-  //     this.dataSource.paginator.firstPage();
-  //   }
-  // }
-  //////---- html code for input --------///(keyup)="applyFilter($event.target.value)"
-
   gotoToday() {
     this.selectedDate = moment().format('jYYYY/jM/jDD');
   }
@@ -221,9 +181,11 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this._drawer.toggle();
   }
 
-  onenterconfirm() {
+  onenterconfirm(obj: EmployeeList) {
     this.flag = 'enterconfirm';
     this._drawer.toggle();
+    this.employeeID = obj.employeeId;
+    this.fullName=obj.fullName;
   }
   onReg() {
     this.flag = 'register';
@@ -233,7 +195,6 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this.flag = 'profile';
     this._drawer.toggle();
     this.employeeID = obj.employeeId;
-
   }
   onabsence() {
     this.flag = 'absence';
@@ -255,6 +216,9 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   cancel() {
     this._drawer.close();
     this.flag = null;
+  }
+  closedStart(){
+    this.flag=null;
   }
 }
 
