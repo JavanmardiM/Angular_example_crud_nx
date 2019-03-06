@@ -32,7 +32,7 @@ import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
     EnterconfirmComponent,
     ExitconfirmComponent,
     AbsenceconfirmComponent,
-    DescriptionComponent
+    DescriptionComponent,
   ],
   imports: [
     CommonModule,

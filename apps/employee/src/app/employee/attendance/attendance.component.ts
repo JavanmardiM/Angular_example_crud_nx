@@ -10,7 +10,8 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  Input
 } from '@angular/core';
 import {
   MatPaginator,
@@ -52,12 +53,14 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     return this._drawer;
   }
 
-  columnName = 'employeeId';
+  columnName :string;
   sortDir: string;
 
   private _drawer: MatDrawer;
 
   employeesDatasource: EmployeeDatasource;
+
+  employeeID: number;
 
   selectedDate: string = moment().format('jYYYY/jM/jDD');
 
@@ -149,14 +152,12 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     //     )
     //   )
     //   .subscribe(_ => {});
-
   }
 
   sortHeaderClick(headerName: string) {
     const date = moment(this.selectedDate, 'jYYYY/jMM/jDD').format(
       'YYYY/MM/DD'
     );
-
 
     if (headerName) {
       this.columnName = headerName;
@@ -167,8 +168,8 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
           ? 'asc'
           : this.sort.direction;
 
-          const sortOpt: Sort = {};
-          sortOpt[this.columnName] = this.sortDir;
+      const sortOpt: Sort = {};
+      sortOpt[this.columnName] = this.sortDir;
 
       this.getEmployees({
         date: date,
@@ -179,7 +180,6 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
 
   getEmployees(option: EmployeeListOpion) {
     // console.log(option);
-
 
     this.employeesDatasource.loadEmployees(option);
 
@@ -229,9 +229,11 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this.flag = 'register';
     this._drawer.toggle();
   }
-  profile() {
+  profile(obj: EmployeeList) {
     this.flag = 'profile';
     this._drawer.toggle();
+    this.employeeID = obj.employeeId;
+
   }
   onabsence() {
     this.flag = 'absence';
@@ -252,6 +254,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
 
   cancel() {
     this._drawer.close();
+    this.flag = null;
   }
 }
 

@@ -1,23 +1,20 @@
-<form fxLayout="column">
+<form fxLayout="column" [formGroup]="form">
   <span class="mat-title">ویرایش اطلاعات</span>
   <mat-form-field>
     <mat-label>کد پرسنلی</mat-label>
-    <input matInput disabled="true" placeholder="کد پرسنلی" />
+    <input matInput disabled="true" placeholder="کد پرسنلی" [value]="employeeInfo.employeeId" formControlName="employeeId" />
   </mat-form-field>
   <mat-form-field>
-    <input matInput disabled="true" placeholder="تاریخ ثبت" />
+    <input matInput placeholder="نام ونام خانوادگی" [value]="employeeInfo.fullName" formControlName="fullName" />
   </mat-form-field>
+  <mat-form-field> <input matInput placeholder="کد ملی"  [value]="employeeInfo.nationalCode" formControlName="nationalCode"/> </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="نام ونام خانوادگی" />
+    <input matInput placeholder="شماره همراه" [value]="employeeInfo.mobileNumber" formControlName="mobileNumber" />
   </mat-form-field>
-  <mat-form-field> <input matInput placeholder="کد ملی" /> </mat-form-field>
-  <mat-form-field>
-    <input matInput placeholder="شماره همراه" />
-  </mat-form-field>
-  <mat-form-field> <input matInput placeholder="آدرس" /> </mat-form-field>
+  <mat-form-field> <input matInput placeholder="آدرس" [value]="employeeInfo.address"  formControlName="address"/> </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
-    <button type="submit" mat-raised-button color="primary">ثبت</button>
+    <button type="submit" mat-raised-button color="primary" (click)="edit()">ثبت</button>
     <button type="button" mat-raised-button color="warn" (click)="cancel()">
       انصراف
     </button>

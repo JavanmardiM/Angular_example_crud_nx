@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 //  const API_URL ='http://192.168.1.155';
@@ -7,6 +7,7 @@ const API_URL = 'http://localhost:8080';
 
 @Injectable()
 export class EmployeeService {
+
   constructor(private http: HttpClient) {}
 
   sendRequest(option?: EmployeeListOpion): Observable<EmployeeList[]> {
@@ -16,6 +17,20 @@ export class EmployeeService {
 
   registerEmployee(employee: Employee): Observable<any> {
     return this.http.post(`${API_URL}/postEmployee`, employee);
+  }
+
+
+  viewEmploee(emploeeID: number): Observable<any> {
+    //const params = new HttpParams();
+    // params.append('id',String(emploeeID));
+  //  params.set('id',String(emploeeID));
+   return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
+   // return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
+  }
+
+  editEmployeeInfo(employee:EmploeeProfile,emploeeID: number):Observable<any>{
+
+    return this.http.put<number>(`${API_URL}/Edit/${emploeeID}` ,employee);
   }
 }
 
@@ -50,6 +65,14 @@ export const EmptyEmployeeListOption: EmployeeListOpion = {
   search: null,
   sortOption: {}
 };
+
+export interface EmploeeProfile {
+  employeeId: number;
+  fullName: string;
+  nationalCode: string;
+  mobileNumber: string;
+  address: string;
+}
 
 // export enum SortDirection {
 //   asc,
