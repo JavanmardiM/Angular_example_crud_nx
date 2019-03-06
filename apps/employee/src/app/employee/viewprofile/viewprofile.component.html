@@ -10,7 +10,7 @@
         <mat-icon>assignment_ind</mat-icon>
         <span>کد پرسنلی :</span>
       </div>
-      <span fxLayout="row" fxFlex="40">{{ employee.code }}</span>
+      <span fxLayout="row" fxFlex="40">{{ employeeInfo.employeeId}}</span>
     </mat-list-item>
 
     <mat-list-item role="listitem">
@@ -18,7 +18,7 @@
         <mat-icon>how_to_reg</mat-icon>
         <span>نام و نام خانوادگی : </span>
       </div>
-      <span fxLayout="row" fxFlex="40">{{ employee.fullname }}</span>
+      <span fxLayout="row" fxFlex="40">{{ employeeInfo.fullName }}</span>
     </mat-list-item>
 
     <mat-list-item role="listitem">
@@ -26,7 +26,7 @@
         <mat-icon>face</mat-icon>
         <span> کد ملی :</span>
       </div>
-      <span fxLayout="row" fxFlex="40">{{ employee.nationalcode }}</span>
+      <span fxLayout="row" fxFlex="40">{{ employeeInfo.nationalCode }}</span>
     </mat-list-item>
 
     <mat-list-item role="listitem">
@@ -34,7 +34,7 @@
         <mat-icon>phone</mat-icon>
         <span> شماره همراه : </span>
       </div>
-      <span fxLayout="row" fxFlex="40">{{ employee.phonenumber }}</span>
+      <span fxLayout="row" fxFlex="40">{{ employeeInfo.mobileNumber }}</span>
     </mat-list-item>
 
     <mat-list-item role="listitem">
@@ -42,7 +42,7 @@
         <mat-icon>location_on</mat-icon>
         <span> آدرس : </span>
       </div>
-      <span fxLayout="row" fxFlex="40">{{ employee.address }}</span>
+      <span fxLayout="row" fxFlex="40">{{ employeeInfo.address }}</span>
     </mat-list-item>
   </mat-list>
   <div fxLayout="column" fxLayoutAlign="end ">
