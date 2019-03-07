@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'angular-nx-description',
@@ -9,13 +9,23 @@ import { Component, OnInit } from '@angular/core';
   }
 })
 export class DescriptionComponent implements OnInit {
-  descEnter =
-    'ضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورود';
-  descAbsence =
-    'ضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورود';
-  descExit =
-    'ضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورودتوضیحات مربوط به ثیت ورود';
+
+  @Input() description:string[];
+  desc:description;
+
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.desc={
+      descEnter : this.description[0],
+      descExit : this.description[1],
+      descAbsence : this.description[2]
+    }
+  }
+}
+
+interface description{
+  descEnter : string,
+  descExit : string,
+  descAbsence : string,
 }

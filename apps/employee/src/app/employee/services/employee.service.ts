@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, observable } from 'rxjs';
 
 //  const API_URL ='http://192.168.1.155';
 const API_URL = 'http://localhost:8080';
 
+export const EmptyEmployeeListOption: EmployeeListOpion = {
+  date: null,
+  search: null,
+  sortOption: {}
+};
+
 @Injectable()
 export class EmployeeService {
-
   constructor(private http: HttpClient) {}
 
   sendRequest(option?: EmployeeListOpion): Observable<EmployeeList[]> {
@@ -19,18 +24,20 @@ export class EmployeeService {
     return this.http.post(`${API_URL}/postEmployee`, employee);
   }
 
-
   viewEmploee(emploeeID: number): Observable<any> {
-    //const params = new HttpParams();
-    // params.append('id',String(emploeeID));
-  //  params.set('id',String(emploeeID));
-   return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
-   // return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
+    return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
   }
 
-  editEmployeeInfo(employee:EmploeeProfile,emploeeID: number):Observable<any>{
+  editEmployeeInfo(employee: EmploeeProfile, emploeeID: number): Observable<any> {
+    return this.http.put<number>(`${API_URL}/Edit/${emploeeID}`, employee);
+  }
 
-    return this.http.put<number>(`${API_URL}/Edit/${emploeeID}` ,employee);
+  employeeEnter(emploeeID: number, gateOption: GateOption): Observable<number> {
+    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Enter`, gateOption);
+  }
+
+  employeeExit(emploeeID: number, gateOption: GateOption): Observable<number> {
+    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Exit`, gateOption);
   }
 }
 
@@ -60,12 +67,6 @@ export interface EmployeeListOpion {
   sortOption?: Sort;
 }
 
-export const EmptyEmployeeListOption: EmployeeListOpion = {
-  date: null,
-  search: null,
-  sortOption: {}
-};
-
 export interface EmploeeProfile {
   employeeId: number;
   fullName: string;
@@ -74,7 +75,8 @@ export interface EmploeeProfile {
   address: string;
 }
 
-// export enum SortDirection {
-//   asc,
-//   desc
-// }
+export interface GateOption {
+  employeeId: number;
+  fullName?: string;
+  description?: string;
+}

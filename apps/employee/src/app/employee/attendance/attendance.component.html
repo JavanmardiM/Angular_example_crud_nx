@@ -1,8 +1,8 @@
 <mat-drawer-container class="example-container">
-  <mat-drawer mode="push" #sidecontent [style.width.px]="500">
+  <mat-drawer mode="push" #sidecontent (closedStart)="closedStart()" [style.width.px]="500">
     <div>
       <span fxFlex></span>
-      <button mat-icon-button (click)="cancel()">
+      <button mat-icon-button (click)="cancel()" tabindex="-1">
         <mat-icon>cancel</mat-icon>
       </button>
     </div>
@@ -35,14 +35,14 @@
       fxLayout="row"
       fxLayoutAlign="center center"
     >
-      <angular-nx-enterconfirm fxFlex="100"></angular-nx-enterconfirm>
+      <angular-nx-enterconfirm [employeeID]="employeeID" [fullName]="fullName" fxFlex="100"></angular-nx-enterconfirm>
     </div>
     <div
       *ngIf="flag === 'exitconfirm'"
       fxLayout="row"
       fxLayoutAlign="center center"
     >
-      <angular-nx-exitconfirm fxFlex="100"></angular-nx-exitconfirm>
+      <angular-nx-exitconfirm [employeeID]="employeeID" [fullName]="fullName"  fxFlex="100"></angular-nx-exitconfirm>
     </div>
     <div
       *ngIf="flag === 'absence'"
@@ -52,7 +52,7 @@
       <angular-nx-absenceconfirm fxFlex="100"></angular-nx-absenceconfirm>
     </div>
     <div *ngIf="flag === 'desc'">
-      <angular-nx-description fxFlex="100"></angular-nx-description>
+      <angular-nx-description [description]="description" fxFlex="100"></angular-nx-description>
     </div>
   </mat-drawer>
   <mat-drawer-content>
@@ -161,7 +161,7 @@
               >
                 تاریخ
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.date | persianDate }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -174,7 +174,7 @@
               >
                 ساعت ورود
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.enterTime }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.enterTime | slice : 0 : 8 }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -187,7 +187,7 @@
               >
                 ساعت خروج
               </th>
-              <td mat-cell *matCellDef="let row">{{ row.exitTime }}</td>
+              <td mat-cell *matCellDef="let row">{{ row.exitTime | slice : 0 : 8  }}</td>
             </ng-container>
 
             <!-- Symbol Column -->
@@ -195,7 +195,7 @@
               <th mat-header-cell *matHeaderCellDef>توضیحات</th>
               <td mat-cell *matCellDef="let row">
                 {{ row.description }}
-                <button mat-icon-button (click)="desc()">
+                <button mat-icon-button (click)="desc(row)">
                   <mat-icon>keyboard_arrow_left</mat-icon>
                 </button>
               </td>
@@ -204,25 +204,18 @@
             <!-- Symbol Column -->
             <ng-container matColumnDef="opration">
               <th mat-header-cell *matHeaderCellDef>عملیات</th>
-              <td mat-cell *matCellDef="let element">
+              <td mat-cell *matCellDef="let row">
                 <div fxLayout="row" fxLayoutGap="5px">
-                  <!--
-                    <button
-                      mat-raised-button
-                      color="primary"
-                      (click)="onexitconfirm()"
-                    >
-                      ثبت خروج
-                    </button>
-                  -->
-                  <button
-                    mat-raised-button
-                    color="accent"
-                    (click)="onenterconfirm()"
-                  >
+                  <button *ngIf="isenter;else exit" mat-raised-button color="accent" (click)="onenterconfirm(row)">
                     ثبت ورود
                   </button>
-                  <button mat-raised-button (click)="onabsence()">
+                  <ng-template #exit>
+                      <button mat-raised-button color="primary" (click)="onexitconfirm(row)" >
+                      ثبت خروج
+                    </button>
+                  </ng-template>
+
+                  <button *ngIf="isenter" mat-raised-button (click)="onabsence(row)">
                     ثبت غیبت
                   </button>
                 </div>

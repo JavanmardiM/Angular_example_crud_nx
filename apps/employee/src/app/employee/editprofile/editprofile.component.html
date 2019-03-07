@@ -2,16 +2,16 @@
   <span class="mat-title">ویرایش اطلاعات</span>
   <mat-form-field>
     <mat-label>کد پرسنلی</mat-label>
-    <input matInput disabled="true" placeholder="کد پرسنلی" [value]="employeeInfo.employeeId" formControlName="employeeId" />
+    <input matInput readonly="!editable" placeholder="کد پرسنلی" formControlName="employeeId" />
   </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="نام ونام خانوادگی" [value]="employeeInfo.fullName" formControlName="fullName" />
+    <input matInput placeholder="نام ونام خانوادگی" formControlName="fullName" />
   </mat-form-field>
-  <mat-form-field> <input matInput placeholder="کد ملی"  [value]="employeeInfo.nationalCode" formControlName="nationalCode"/> </mat-form-field>
+  <mat-form-field> <input matInput placeholder="کد ملی"  formControlName="nationalCode"/> </mat-form-field>
   <mat-form-field>
-    <input matInput placeholder="شماره همراه" [value]="employeeInfo.mobileNumber" formControlName="mobileNumber" />
+    <input matInput placeholder="شماره همراه" formControlName="mobileNumber" />
   </mat-form-field>
-  <mat-form-field> <input matInput placeholder="آدرس" [value]="employeeInfo.address"  formControlName="address"/> </mat-form-field>
+  <mat-form-field> <input matInput placeholder="آدرس"  formControlName="address"/> </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
     <button type="submit" mat-raised-button color="primary" (click)="edit()">ثبت</button>

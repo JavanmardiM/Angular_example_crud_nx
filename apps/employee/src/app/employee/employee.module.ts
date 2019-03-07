@@ -22,6 +22,7 @@ import { MatPaginatorIntl } from '@angular/material';
 import { DescriptionComponent } from './description/description.component';
 
 import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
+import { PersianDatePipe } from './persian-date.pipe';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
     ExitconfirmComponent,
     AbsenceconfirmComponent,
     DescriptionComponent,
+    PersianDatePipe,
   ],
   imports: [
     CommonModule,
