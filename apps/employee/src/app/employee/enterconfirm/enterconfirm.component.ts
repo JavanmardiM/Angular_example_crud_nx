@@ -40,7 +40,10 @@ export class EnterconfirmComponent implements OnInit {
       const info : GateOption = this.form.value;
       this.gateOption={employeeId : this.employeeID, fullName : this.fullName, description : info.description};
       console.log(this.gateOption);
-      this.employeeService.employeeEnter(this.employeeID,this.gateOption).subscribe();
+      this.employeeService.employeeEnter(this.employeeID,this.gateOption).subscribe(
+        ID=>alert('ثبت شد.'),
+        err=>alert('خطا')
+      );
     }
   }
 

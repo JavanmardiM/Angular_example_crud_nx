@@ -54,6 +54,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   }
   private _drawer: MatDrawer;
 
+  isenter : boolean = true;
   columnName: string;
   sortDir: string;
   employeesDatasource: EmployeeDatasource;
@@ -63,6 +64,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   employeeListOption: EmployeeListOpion = EmptyEmployeeListOption;
   flag: ViewFlag = null;
   dataSource: MatTableDataSource<EmployeeList>;
+  description : string[];
 
   displayedColumns: string[] = [
   'number',
@@ -176,9 +178,11 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this.selectedDate = moment().format('jYYYY/jM/jDD');
   }
 
-  onexitconfirm() {
+  onexitconfirm(obj: EmployeeList) {
     this.flag = 'exitconfirm';
     this._drawer.toggle();
+    this.employeeID = obj.employeeId;
+    this.fullName=obj.fullName;
   }
 
   onenterconfirm(obj: EmployeeList) {
@@ -196,13 +200,17 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this._drawer.toggle();
     this.employeeID = obj.employeeId;
   }
-  onabsence() {
+  onabsence(obj: EmployeeList) {
     this.flag = 'absence';
     this._drawer.toggle();
+    this.employeeID = obj.employeeId;
+    this.fullName=obj.fullName;
   }
-  desc() {
+  desc(obj: EmployeeList) {
     this.flag = 'desc';
     this._drawer.toggle();
+    this.employeeID = obj.employeeId;
+    this.description=obj.description;
   }
 
   flagChange(event: ViewFlag) {
