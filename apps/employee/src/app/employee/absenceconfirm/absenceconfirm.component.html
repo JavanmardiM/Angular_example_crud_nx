@@ -1,12 +1,12 @@
-<form fxLayout="column">
+<form fxLayout="column" [formGroup]="form">
   <span class="mat-title">ثبت غیبت</span>
   <mat-form-field>
     <mat-label>توضیحات خود را وارد نمایید.</mat-label>
-    <textarea matInput  maxlength="256" placeholder="توضیحات"></textarea>
+    <textarea matInput  maxlength="256" formControlName="description" placeholder="توضیحات"></textarea>
   </mat-form-field>
 
   <div fxLayout="row" fxLayoutGap="10px">
-      <button mat-raised-button color="primary" >ثبت غیبت</button>
+      <button mat-raised-button color="primary" (click)="save()" >ثبت غیبت</button>
       <button mat-raised-button color="warn" (click)="cancel()">انصراف</button>
   </div>
 </form>

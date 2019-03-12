@@ -15,7 +15,6 @@ import {
 import {
   EmployeeDrawerService,
   CloseDrawerEvent,
-  DataService
 } from '../services/employee-drawer.service';
 
 @Component({
@@ -69,12 +68,9 @@ export class ViewprofileComponent implements OnInit, OnDestroy, AfterContentChec
   constructor(
     private employeeService: EmployeeService,
     private employeeDrawerService: EmployeeDrawerService,
-    private data: DataService
   ) {}
 
   ngOnInit() {
-    this.data.currentFlag.subscribe(flag => (this.flag = flag));
-
     this.employeeService.viewEmploee(this.empId).subscribe(
       employeeInfo => {
         this.employeeInfo = employeeInfo;
@@ -84,17 +80,12 @@ export class ViewprofileComponent implements OnInit, OnDestroy, AfterContentChec
   }
 
   ngOnDestroy(): void {
-    console.log('Selected Employee Id: ', this.empId);
   }
 
   ngAfterContentChecked() {}
 
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent());
-  }
-
-  onEditViaService() {
-    this.data.changeFlag('edit');
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent('viewprofile'));
   }
 
   onEditViaOutput() {

@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, observable } from 'rxjs';
 
-//  const API_URL ='http://192.168.1.155';
 const API_URL = 'http://localhost:8080';
 
 export const EmptyEmployeeListOption: EmployeeListOpion = {
@@ -15,9 +14,9 @@ export const EmptyEmployeeListOption: EmployeeListOpion = {
 export class EmployeeService {
   constructor(private http: HttpClient) {}
 
-  sendRequest(option?: EmployeeListOpion): Observable<EmployeeList[]> {
+  sendRequest(option?: EmployeeListOpion): Observable<EmployeesListWithAttendances> {
     option = option || EmptyEmployeeListOption;
-    return this.http.post<EmployeeList[]>(`${API_URL}/list`, option);
+    return this.http.post<EmployeesListWithAttendances>(`${API_URL}/list`, option);
   }
 
   registerEmployee(employee: Employee): Observable<any> {
@@ -28,16 +27,35 @@ export class EmployeeService {
     return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
   }
 
-  editEmployeeInfo(employee: EmploeeProfile, emploeeID: number): Observable<any> {
+  editEmployeeInfo(
+    employee: EmploeeProfile,
+    emploeeID: number
+  ): Observable<any> {
     return this.http.put<number>(`${API_URL}/Edit/${emploeeID}`, employee);
   }
 
   employeeEnter(emploeeID: number, gateOption: GateOption): Observable<number> {
-    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Enter`, gateOption);
+    return this.http.post<number>(
+      `${API_URL}/api/Employee/${emploeeID}/Enter`,
+      gateOption
+    );
   }
 
   employeeExit(emploeeID: number, gateOption: GateOption): Observable<number> {
-    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Exit`, gateOption);
+    return this.http.post<number>(
+      `${API_URL}/api/Employee/${emploeeID}/Exit`,
+      gateOption
+    );
+  }
+
+  employeeAbsence(
+    emploeeID: number,
+    gateOption: GateOption
+  ): Observable<number> {
+    return this.http.post<number>(
+      `${API_URL}/api/Employee/${emploeeID}/Absence`,
+      gateOption
+    );
   }
 }
 
@@ -46,6 +64,7 @@ export interface Employee {
   nationalCode: number;
   mobileNumber: string;
   address: string;
+  employeeId?: string;
 }
 export interface EmployeeList {
   employeeId: number;
@@ -56,15 +75,21 @@ export interface EmployeeList {
   description: string[];
   isAbsence: boolean;
 }
+export interface EmployeesListWithAttendances{
+  employeesListWithAttendances : EmployeeList[];
+  totalCount : number;
+}
 
-export interface Sort {
+export interface SortOption {
   [key: string]: string;
 }
 
 export interface EmployeeListOpion {
   date?: string;
   search?: string;
-  sortOption?: Sort;
+  sortOption?: SortOption;
+  pageId?: number;
+  recordsPerPage?: number;
 }
 
 export interface EmploeeProfile {
@@ -77,6 +102,5 @@ export interface EmploeeProfile {
 
 export interface GateOption {
   employeeId: number;
-  fullName?: string;
   description?: string;
 }

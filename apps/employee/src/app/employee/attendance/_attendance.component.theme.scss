@@ -1,2 +1,21 @@
 @mixin attendance-component-theme($theme) {
+  $primary :map-get($theme, primary);
+  $warn :map-get($theme, warn);
+  $accent :map-get($theme, accent);
+
+  .angular-nx-attendance{
+
+    .isAbsence{
+      background-color: mat-color($primary,200,0.1);
+    }
+    .disabledWarn{
+      background-color: mat-color($warn,200,0.1);
+    }
+    .disabledPrimary{
+      background-color: mat-color($primary,200,0.1);
+    }
+    .disabledAccent{
+      background-color: mat-color($accent,200,0.1);
+    }
+  }
 }

@@ -1,16 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormArray,
-  FormControl
-} from '@angular/forms';
+import {  FormGroup,  FormBuilder,  Validators,  FormControl} from '@angular/forms';
+import {MatSnackBar} from '@angular/material';
+
+import {TavsysValidators} from '../../validators'
 import { EmployeeService, Employee } from '../services/employee.service';
-import {
-  EmployeeDrawerService,
-  CloseDrawerEvent
-} from '../services/employee-drawer.service';
+import {  EmployeeDrawerService,  CloseDrawerEvent} from '../services/employee-drawer.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -23,20 +18,27 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   isRegistered?: boolean;
 
-  public get fullname(): FormControl {
-    return this.form.get('fullname') as FormControl;
+  public get fullName(): FormControl {
+    return this.form.get('fullName') as FormControl;
+  }
+  public get nationalCode(): FormControl{
+    return this.form.get('nationalCode') as FormControl;
+  }
+  public get mobileNumber() : FormControl{
+    return this.form.get('mobileNumber') as FormControl;
   }
 
 
   constructor(
     formBuilder: FormBuilder,
     private employeeService: EmployeeService,
-    private employeeDrawerService: EmployeeDrawerService
+    private employeeDrawerService: EmployeeDrawerService,
+    private snackBar: MatSnackBar
   ) {
     this.form = formBuilder.group({
-      fullname: formBuilder.control('', [Validators.required]),
-      nationalCode: ['', [Validators.required]],
-      mobileNumber: ['', [Validators.required]],
+      fullName: formBuilder.control('', [Validators.required]),
+      nationalCode: ['', [Validators.required , TavsysValidators.nationalcode]],
+      mobileNumber: ['', [Validators.required , TavsysValidators.mobile]],
       address: ['', [Validators.required]]
     });
   }
@@ -47,22 +49,30 @@ export class RegisterComponent implements OnInit {
     if (this.form.valid) {
       const employee: Employee = this.form.value;
       this.employeeService.registerEmployee(employee).subscribe(
-        code => {
-          console.log('employee registered.');
+        employeeId => {
+          employee.employeeId = employeeId;
+          this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<Employee>('register', employee));
 
-          alert(
-            'کاربر با شماره پرسنلی' + ' ' + code + ' ' + 'در سیستم ثبت شد.'
-          );
-          this.form.reset();
+          this.snackBar.open(`کاربر با شماره پرسنلی ${employeeId} در سیستم ثبت شد`, 'بستن', {
+            duration: 2000,
+          });
+
         },
         err => {
-          alert('خطا رخ داد.');
-          console.log('An error occurred when registring an employee.', err);
+          this.snackBar.open('با عرض پوزش در سیستم خطا رخ داد', 'بستن', {
+            duration: 2000,
+          });
         }
       );
     }
   }
+
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent());
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<Employee>('register', null));
   }
+
+  openSnackBar(message: string, action: string) {
+
+  }
+
 }

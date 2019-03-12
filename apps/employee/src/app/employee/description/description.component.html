@@ -1,15 +1,19 @@
-<mat-list fxLayout="column" fxLayoutGap="15px" >
-    <span  class="mat-title" >توضیحات</span>
-    <mat-list-item fxLayout="column" fxLayoutGap="5px">
-        <div fxLayout="column"><h3> ورود</h3></div>
-       <div fxLayout="column"> <p>{{ desc.descEnter}}</p></div>
-    </mat-list-item>
-    <mat-list-item  fxLayout="column" fxLayoutGap="5px">
-        <h3> خروج</h3>
-         <div><p>{{ desc.descExit }}</p></div>
-    </mat-list-item>
-    <mat-list-item  fxLayout="column" fxLayoutGap="5px">
-        <h3> غیبت</h3>
-        <p>{{ desc.descAbsence }}</p>
-    </mat-list-item>
-</mat-list>
+<div fxLayout="column" fxLayoutGap="20px">
+  <span class="mat-title">توضیحات</span>
+
+    <div fxLayout="column" fxLayoutGap="5px">
+      <h4>ورود</h4>
+      <p>{{ desc.descEnter }}</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div fxLayout="column" fxLayoutGap="5px">
+      <h4>خروج</h4>
+      <p>{{ desc.descExit }}</p>
+    </div>
+    <mat-divider></mat-divider>
+    <div  fxLayout="column" fxLayoutGap="5px">
+      <h4>غیبت</h4>
+      <p>{{ desc.descAbsence }}</p>
+    </div>
+
+  </div>

@@ -4,7 +4,8 @@ import {
   CloseDrawerEvent
 } from '../services/employee-drawer.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { GateOption, EmployeeService } from '../services/employee.service';
+import { GateOption, EmployeeService, EmployeeList } from '../services/employee.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'angular-nx-exitconfirm',
@@ -17,16 +18,18 @@ import { GateOption, EmployeeService } from '../services/employee.service';
 export class ExitconfirmComponent implements OnInit {
 
   form:FormGroup;
-  gateOption:GateOption={
+  gateOption:GateOption = {
     employeeId:0
   };
 
-  @Input() employeeID : number;
-  @Input() fullName : string;
+  @Input() selectedEmployee : EmployeeList;
 
-  constructor(private employeeDrawerService: EmployeeDrawerService,
+  constructor(
+    private employeeDrawerService: EmployeeDrawerService,
     formBuilder:FormBuilder,
-    private employeeService : EmployeeService) {
+    private employeeService : EmployeeService,
+    private snackBar: MatSnackBar
+    ) {
       this.form=formBuilder.group({
         description : ['']
       });
@@ -36,14 +39,31 @@ export class ExitconfirmComponent implements OnInit {
 
   save(){
     const info : GateOption = this.form.value;
-    this.gateOption={employeeId:this.employeeID, fullName:this.fullName, description:info.description}
-    this.employeeService.employeeExit(this.employeeID,this.gateOption).subscribe(
-      ID=>alert('ثبت شد.'),
-      err=>alert('خطا')
+    this.gateOption={employeeId:this.selectedEmployee.employeeId, description:info.description}
+    this.employeeService.employeeExit(this.selectedEmployee.employeeId , this.gateOption).subscribe(
+      ID=>{
+        this.snackBar.open(`خروج برای کاربر با شماره پرسنلی ${ID} در سیستم ثبت شد`, 'بستن', {
+          duration: 2000,
+        });
+        this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<EmployeeList>('exitconfirm', {
+          employeeId : this.selectedEmployee.employeeId,
+          fullName : this.selectedEmployee.fullName,
+          date :this.selectedEmployee.date,
+          description : [this.selectedEmployee.description[0],info.description,this.selectedEmployee.description[2]],
+          enterTime :this.selectedEmployee.enterTime,
+          exitTime : new Date().toLocaleTimeString(),
+          isAbsence : false
+        }));
+      },
+      err => {
+        this.snackBar.open('با عرض پوزش در سیستم خطا رخ داد', 'بستن', {
+          duration: 2000,
+        });
+      }
     );
   }
 
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent());
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent('exitconfirm'));
   }
 }

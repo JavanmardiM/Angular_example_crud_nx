@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { EmployeeList } from '../services/employee.service';
 
 @Component({
   selector: 'angular-nx-description',
@@ -10,16 +11,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DescriptionComponent implements OnInit {
 
-  @Input() description:string[];
+  @Input() selectedEmployee : EmployeeList;
   desc:description;
 
   constructor() {}
 
   ngOnInit() {
     this.desc={
-      descEnter : this.description[0],
-      descExit : this.description[1],
-      descAbsence : this.description[2]
+      descEnter : this.selectedEmployee.description[0],
+      descExit : this.selectedEmployee.description[1],
+      descAbsence : this.selectedEmployee.description[2]
     }
   }
 }
