@@ -33,7 +33,8 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 @include angular-material-theme($candy-app-theme);
 
 @include app-typography($candy-app-theme);
-// @include attendance-theme($candy-app-theme);
+
+@include attendance-component-theme($candy-app-theme);
 
 
 

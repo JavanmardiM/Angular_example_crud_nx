@@ -17,7 +17,7 @@ import { EditprofileComponent } from './editprofile/editprofile.component';
 import { EnterconfirmComponent } from './enterconfirm/enterconfirm.component';
 import { ExitconfirmComponent } from './exitconfirm/exitconfirm.component';
 import { AbsenceconfirmComponent } from './absenceconfirm/absenceconfirm.component';
-import { EmployeeDrawerService, DataService } from './services/employee-drawer.service';
+import { EmployeeDrawerService } from './services/employee-drawer.service';
 import { MatPaginatorIntl } from '@angular/material';
 import { DescriptionComponent } from './description/description.component';
 
@@ -47,7 +47,7 @@ import { PersianDatePipe } from './persian-date.pipe';
   ],
   providers: [
     EmployeeService,
-    EmployeeDrawerService,DataService,
+    EmployeeDrawerService,
     { provide: MatPaginatorIntl, useClass: MatPaginatorIntlCro }
   ],
   exports: [
