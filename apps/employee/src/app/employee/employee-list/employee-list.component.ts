@@ -1,21 +1,19 @@
-import {  EmployeeService,  EmployeeListOpion,  EmptyEmployeeListOption,  EmployeeList,  SortOption,  Employee,} from './../services/employee.service';
-import {  Component,  OnInit,  ViewChild,  ElementRef,  AfterViewInit,} from '@angular/core';
-import {  MatPaginator,  MatSort,  MatDrawer,  MatPaginatorIntl} from '@angular/material';
-import {  EmployeeDrawerService, DrawerEvent,} from '../services/employee-drawer.service';
-import moment from 'moment-jalaali';
-import { EmployeeDatasource } from './employees.datasource';
+import  * as moment  from 'moment-jalaali';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { EmployeeList, SortOption, EmployeeListOpion, EmptyEmployeeListOption, EmployeeService, Employee } from '../services/employee.service';
+import { MatDrawer, MatPaginator, MatSort } from '@angular/material';
+import { EmployeeDatasource } from '../attendance/employees.datasource';
+import { EmployeeDrawerService, DrawerEvent } from '../services/employee-drawer.service';
+import { Router } from '@angular/router';
 
-type ViewFlag =  | null  | 'edit'  | 'profile'  | 'register'  | 'enterconfirm'  | 'exitconfirm'  | 'absence'  | 'desc';
+type ViewFlag =  | null  | 'edit'   | 'register' ;
 
 @Component({
-  selector: 'angular-nx-attendance',
-  templateUrl: './attendance.component.html',
-  styleUrls: ['./attendance.component.scss'],
-  host : {
-    'class' : 'angular-nx-attendance'
-  }
+  selector: 'angular-nx-employee-list',
+  templateUrl: './employee-list.component.html',
+  styleUrls: ['./employee-list.component.scss']
 })
-export class AttendanceComponent implements OnInit, AfterViewInit {
+export class EmployeeListComponent implements OnInit, AfterViewInit {
   @ViewChild('sidecontent')
   public set drawer(drawer: MatDrawer) {
     this._drawer = drawer;
@@ -36,7 +34,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   selectedEmployee : EmployeeList;
   isToday :boolean;
 
-  displayedColumns: string[] = ['number','employeeId','fullname','date','enterTime','exitTime', 'des','opration'  ];
+  displayedColumns: string[] = ['number','employeeId','fullname', 'nationalCode' , 'mobileNumber' , 'address' ,'opration' ];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -46,6 +44,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   constructor(
     private employeeService: EmployeeService,
     private employeeDrawerService: EmployeeDrawerService,
+    private router : Router
   ) {}
 
   ngOnInit() {
@@ -69,7 +68,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
             isAbsence: false
           });
          }
-          else if(closedEvent.target=== 'editprofile' ||  'enterconfirm' || 'exitconfirm' || 'absenceconfirm') {
+          else if(closedEvent.target=== 'editprofile') {
           updatedEmployee = closedEvent.getPayload<EmployeeList>();
           employeeIndex = this.employeesDatasource.getEmployeeIndexById(updatedEmployee.employeeId);
           this.employeesDatasource.updateEmployeeList(employeeIndex,updatedEmployee );
@@ -110,7 +109,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
 
   getEmployees() {
     this.employeesDatasource.loadEmployees({
-      date: moment(this.selectedDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD'),
+     date: moment(this.selectedDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD'),
       search: this.input.nativeElement.value,
       sortOption: this.sortOpt,
       pageId:this.paginator.pageIndex,
@@ -129,46 +128,20 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   }
 
   gotoToday() {
-    this.selectedDate = moment().format('jYYYY/jM/jDD');
-  }
-
-  onexitconfirm(obj: EmployeeList) {
-    this.flag = 'exitconfirm';
-    this._drawer.toggle();
-    this.selectedEmployee = obj;
-  }
-
-  onenterconfirm(obj: EmployeeList) {
-    this.flag = 'enterconfirm';
-    this._drawer.toggle();
-    this.selectedEmployee = obj;
+   this.selectedDate = moment().format('jYYYY/jM/jDD');
   }
   onReg() {
     this.flag = 'register';
     this._drawer.toggle();
   }
-  profile(obj: EmployeeList) {
-    this.flag = 'profile';
-    this._drawer.toggle();
-    this.employeeID = obj.employeeId;
-    this.selectedEmployee = obj;
-  }
-  onabsence(obj: EmployeeList) {
-    this.flag = 'absence';
+  edit(obj: EmployeeList){
+    this.flag = 'edit';
     this._drawer.toggle();
     this.selectedEmployee = obj;
   }
-  desc(obj: EmployeeList) {
-    this.flag = 'desc';
-    this._drawer.toggle();
-    this.selectedEmployee = obj;
-  }
-
   flagChange(event: ViewFlag) {
     if (event === 'edit') {
       this.flag = 'edit';
-    } else if (event === 'profile') {
-      this.flag = 'profile';
     }
   }
   cancel() {
@@ -178,41 +151,24 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   closedStart(){
     this.flag=null;
   }
-
   search(event){
     if(event.keyCode === 13){
       this.getEmployees();
     }
   }
-
   getNext(event){
     console.log(event);
     this.getEmployees();
 
   }
-
   searchButton(){
     this.input.nativeElement.value='';
     this.getEmployees();
   }
+  archivedList(){
+    this.router.navigate(['/archive']);
+  }
+
 }
 
-export class MatPaginatorIntlCro extends MatPaginatorIntl {
-  itemsPerPageLabel = 'آیتم در هر صفحه';
-  nextPageLabel = 'صفحه بعد';
-  previousPageLabel = 'صفحه قبل';
 
-  getRangeLabel = function(page, pageSize, length) {
-    if (length === 0 || pageSize === 0) {
-      return '0 از ' + length;
-    }
-    length = Math.max(length, 0);
-    const startIndex = page * pageSize;
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex =
-      startIndex < length
-        ? Math.min(startIndex + pageSize, length)
-        : startIndex + pageSize;
-    return startIndex + 1 + ' - ' + endIndex + ' از ' + length;
-  };
-}

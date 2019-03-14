@@ -10,20 +10,15 @@ import { AppComponent } from './app.component';
 import { EmployeeModule } from './employee/employee.module';
 import { MaterialAppModule } from './material.app.module';
 import { Routes, RouterModule } from '@angular/router';
+import { EmployeeListComponent } from './employee/employee-list/employee-list.component';
 import { AttendanceComponent } from './employee/attendance/attendance.component';
-import { RegisterComponent } from './employee/register/register.component';
-import { EditprofileComponent } from './employee/editprofile/editprofile.component';
-import { EnterconfirmComponent } from './employee/enterconfirm/enterconfirm.component';
-import { ExitconfirmComponent } from './employee/exitconfirm/exitconfirm.component';
+import { ArchivedListComponent } from './employee/archived-list/archived-list.component';
 
 const appRoutes: Routes = [
-  { path: '', component: AttendanceComponent },
-  { path: '', component: RegisterComponent },
-  { path: '', component: EditprofileComponent },
-  { path: '', component: ViewprofileComponent },
-  { path: '', component: AbsenceconfirmComponent },
-  { path: '', component: EnterconfirmComponent },
-  { path: '', component: ExitconfirmComponent }
+  { path: '', component: EmployeeListComponent },
+  { path: 'attendance', component: AttendanceComponent },
+  { path: 'archive', component: ArchivedListComponent },
+  { path: '**', redirectTo: ''}
 
 ];
 
@@ -36,7 +31,7 @@ const appRoutes: Routes = [
     NxModule.forRoot(),
     BrowserAnimationsModule,
     MaterialAppModule,
-
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]
