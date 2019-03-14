@@ -23,7 +23,6 @@ import { TavsysValidators } from '../../validators';
 export class EditprofileComponent implements OnInit {
 
   @Output() cancelEdit = new EventEmitter<string>();
- //@Input() public empId : number;
   @Input() public selectedEmployee : EmployeeList;
   @Output() editedEmployeeInfo : EmploeeProfile;
 

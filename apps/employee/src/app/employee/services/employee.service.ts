@@ -27,35 +27,20 @@ export class EmployeeService {
     return this.http.get<EmploeeProfile>(`${API_URL}/GetEmployee/${emploeeID}`);
   }
 
-  editEmployeeInfo(
-    employee: EmploeeProfile,
-    emploeeID: number
-  ): Observable<any> {
+  editEmployeeInfo(employee: EmploeeProfile, emploeeID: number): Observable<any> {
     return this.http.put<number>(`${API_URL}/Edit/${emploeeID}`, employee);
   }
 
   employeeEnter(emploeeID: number, gateOption: GateOption): Observable<number> {
-    return this.http.post<number>(
-      `${API_URL}/api/Employee/${emploeeID}/Enter`,
-      gateOption
-    );
+    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Enter`, gateOption);
   }
 
   employeeExit(emploeeID: number, gateOption: GateOption): Observable<number> {
-    return this.http.post<number>(
-      `${API_URL}/api/Employee/${emploeeID}/Exit`,
-      gateOption
-    );
+    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Exit`, gateOption);
   }
 
-  employeeAbsence(
-    emploeeID: number,
-    gateOption: GateOption
-  ): Observable<number> {
-    return this.http.post<number>(
-      `${API_URL}/api/Employee/${emploeeID}/Absence`,
-      gateOption
-    );
+  employeeAbsence(emploeeID: number, gateOption: GateOption): Observable<number> {
+    return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Absence`, gateOption );
   }
 }
 

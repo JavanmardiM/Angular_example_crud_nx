@@ -22,6 +22,7 @@ import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
 import { PersianDatePipe } from './persian-date.pipe';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { ArchivedListComponent } from './archived-list/archived-list.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { ArchivedListComponent } from './archived-list/archived-list.component';
     PersianDatePipe,
     EmployeeListComponent,
     ArchivedListComponent,
+    LoginComponent,
   ],
   imports: [
     CommonModule,

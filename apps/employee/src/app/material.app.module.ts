@@ -6,6 +6,7 @@ import {
   MatButtonModule,
   MatIconModule,
   MatDialogModule,
+  MatListModule,
 } from '@angular/material';
 
 const includeModules = [
@@ -15,6 +16,7 @@ const includeModules = [
   MatButtonModule,
   MatIconModule,
   MatDialogModule,
+  MatListModule
 ];
 
 @NgModule({

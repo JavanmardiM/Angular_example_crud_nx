@@ -87,9 +87,5 @@ export class ViewprofileComponent implements OnInit, OnDestroy, AfterContentChec
   cancel(): void {
     this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent('viewprofile'));
   }
-
-  onEditViaOutput() {
-    this.flagViaOutput.emit('edit');
-  }
 }
 type ViewFlag = null | 'edit';

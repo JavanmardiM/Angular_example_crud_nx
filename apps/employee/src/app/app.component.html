@@ -1,22 +1,36 @@
 <div dir="rtl">
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="sidenav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
 
-  سازمان
-</mat-toolbar>
+    سازمان
+  </mat-toolbar>
 
-<mat-sidenav-container class="example-container" dir="rtl">
-  <mat-sidenav mode="side" #sidenav position="start">
-    <ul class="sideNav" fxLayout="column" fxLayoutGap="10px">
-      <li>منو 1</li>
-      <li>منو 2</li>
-    </ul>
-  </mat-sidenav>
+  <mat-sidenav-container class="example-container" dir="rtl">
+    <mat-sidenav mode="side" #sidenav position="start">
+      <mat-list  fxLayout="column" fxLayoutGap="10px" [style.padding.px]="15">
+        <mat-list-item>
+          <a class="sideNavLink" [routerLink]="['/attendance']"  >
+              <mat-icon>how_to_reg</mat-icon>
+              لیست حضور و غیاب
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+         <a class="sideNavLink" [routerLink]="['/employeeList']"  >
+              <mat-icon>account_box</mat-icon>
+              لیست کارمندان ثبت شده
+          </a>
+        </mat-list-item>
+        <mat-list-item>
+          <a class="sideNavLink" [routerLink]="['/archive']"  >
+              <mat-icon>supervisor_account</mat-icon>
+              لیست کارمندان آرشیو شده
+          </a>
+        </mat-list-item>
+      </mat-list>
+    </mat-sidenav>
 
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <mat-sidenav-content> <router-outlet></router-outlet> </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

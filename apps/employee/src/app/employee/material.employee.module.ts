@@ -11,7 +11,10 @@ import {
   MatFormFieldModule,
   MatSortModule,
   MatProgressSpinnerModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatCheckboxModule,
+  MatTooltipModule,
+  MatDialogModule
 } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,7 +33,10 @@ const includeModules = [
   MatFormFieldModule,
   MatSortModule,
   MatProgressSpinnerModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatCheckboxModule,
+  MatTooltipModule,
+  MatDialogModule
 ];
 
 @NgModule({

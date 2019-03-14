@@ -6,14 +6,11 @@
         <mat-icon>cancel</mat-icon>
       </button>
     </div>
-    <div fxLayout="row" fxLayoutAlign="center center" *ngIf="flag === 'register'" >
-      <app-register fxFlex="80"></app-register>
-    </div>
     <div *ngIf="flag === 'profile'" fxLayout="row" fxLayoutAlign="center center">
-      <angular-nx-viewprofile [empId]="employeeID" fxFlex="100" (flagViaOutput)="flagChange($event)" ></angular-nx-viewprofile>
+      <angular-nx-viewprofile [empId]="employeeID" fxFlex="100"  ></angular-nx-viewprofile>
     </div>
     <div fxLayout="row" fxLayoutAlign="center center" *ngIf="flag === 'edit'">
-      <angular-nx-editprofile [selectedEmployee]="selectedEmployee" fxFlex="90" (cancelEdit)="flagChange($event)"></angular-nx-editprofile>
+      <angular-nx-editprofile [selectedEmployee]="selectedEmployee" fxFlex="90"></angular-nx-editprofile>
     </div>
     <div *ngIf="flag === 'enterconfirm'" fxLayout="row" fxLayoutAlign="center center">
       <angular-nx-enterconfirm [selectedEmployee]="selectedEmployee"  fxFlex="100"></angular-nx-enterconfirm>
@@ -31,7 +28,7 @@
   <mat-drawer-content>
     <mat-card>
       <div fxLayout="row">
-        <mat-card-title>سامانه حضور و غیاب</mat-card-title>
+        <mat-card-title>لیست حضور و غیاب</mat-card-title>
       </div>
 
       <mat-card-content>
@@ -49,17 +46,14 @@
           </div>
           <span fxFlex></span>
           <div fxLayoutGap="10px">
-            <mat-form-field>
+            <mat-checkbox>نمایش کارمندان آرشیو شده</mat-checkbox>
+            <mat-form-field  appearance="outline"[style.width.px]="300">
               <mat-label>جستجو </mat-label>
               <input #input matInput placeholder="جستجو" (keydown)="search($event)"/>
               <button matSuffix mat-icon-button *ngIf="input.value!=''" (click)="searchButton()">
-                <mat-icon>close</mat-icon>
+                <mat-icon [style.fontSize.%]="100">close</mat-icon>
               </button>
             </mat-form-field>
-            <button mat-raised-button color="primary" (click)="onReg()">
-              ثبت کارمند جدید
-              <mat-icon matPrefix>person_add</mat-icon>
-            </button>
           </div>
         </div>
         <div
@@ -81,9 +75,7 @@
                 کد پرسنلی
               </th>
               <td mat-cell *matCellDef="let row">
-                <button mat-button (click)="profile(row)">
                   {{ row.employeeId }}
-                </button>
               </td>
             </ng-container>
 
@@ -129,13 +121,16 @@
               <th mat-header-cell *matHeaderCellDef>عملیات</th>
               <td mat-cell *matCellDef="let row">
                 <div fxLayout="row" fxLayoutGap="5px">
-                  <button class="opration" *ngIf="isToday && !row.enterTime && !row.exitTime && !row.isAbsence"  mat-raised-button color="accent" (click)="onenterconfirm(row)">
+                  <button mat-icon-button (click)="profile(row)"   matTooltip="نمایش اطلاعات کاربری" >
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button  *ngIf="isToday && !row.enterTime && !row.exitTime && !row.isAbsence"  matTooltip="ثبت ورود"  mat-raised-button color="accent" (click)="onenterconfirm(row)">
                     ثبت ورود
                   </button>
-                  <button class="opration" *ngIf="isToday && !row.exitTime && row.enterTime && !row.isAbsence"  mat-raised-button color="primary" (click)="onexitconfirm(row)" >
-                    ثبت خروج
+                  <button  *ngIf="isToday && !row.exitTime && row.enterTime && !row.isAbsence"  matTooltip="ثبت خروج" mat-icon-button color="primary" (click)="onexitconfirm(row)" >
+                    	<mat-icon>exit_to_app</mat-icon>
                   </button>
-                  <button class="opration" *ngIf="isToday && !row.isAbsence && !row.exitTime"  mat-raised-button (click)="onabsence(row)">
+                  <button  *ngIf="isToday && !row.isAbsence && !row.exitTime"  matTooltip="ثبت غیبت" mat-raised-button (click)="onabsence(row)">
                     ثبت غیبت
                   </button>
                 </div>

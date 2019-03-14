@@ -5,7 +5,7 @@ import {  EmployeeDrawerService, DrawerEvent,} from '../services/employee-drawer
 import moment from 'moment-jalaali';
 import { EmployeeDatasource } from './employees.datasource';
 
-type ViewFlag =  | null  | 'edit'  | 'profile'  | 'register'  | 'enterconfirm'  | 'exitconfirm'  | 'absence'  | 'desc';
+type ViewFlag =  | null  | 'edit'  | 'profile'  | 'enterconfirm'  | 'exitconfirm'  | 'absence'  | 'desc';
 
 @Component({
   selector: 'angular-nx-attendance',
@@ -56,20 +56,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
 
     this.employeeDrawerService.drawerClosed().subscribe(
       (closedEvent:DrawerEvent<any>) => {
-        if(closedEvent.target==='register') {
-          const registeredEmployee = closedEvent.getPayload<Employee>();
-
-          this.employeesDatasource.addEmployeeItem({
-            date: moment(this.selectedDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD'),
-            employeeId: parseInt(registeredEmployee.employeeId, 10),
-            description:['','',''],
-            enterTime: null,
-            exitTime: null,
-            fullName: String(registeredEmployee.fullName),
-            isAbsence: false
-          });
-         }
-          else if(closedEvent.target=== 'editprofile' ||  'enterconfirm' || 'exitconfirm' || 'absenceconfirm') {
+       if(closedEvent.target=== 'enterconfirm' || 'exitconfirm' || 'absenceconfirm') {
           updatedEmployee = closedEvent.getPayload<EmployeeList>();
           employeeIndex = this.employeesDatasource.getEmployeeIndexById(updatedEmployee.employeeId);
           this.employeesDatasource.updateEmployeeList(employeeIndex,updatedEmployee );
@@ -143,10 +130,6 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this._drawer.toggle();
     this.selectedEmployee = obj;
   }
-  onReg() {
-    this.flag = 'register';
-    this._drawer.toggle();
-  }
   profile(obj: EmployeeList) {
     this.flag = 'profile';
     this._drawer.toggle();
@@ -164,13 +147,6 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this.selectedEmployee = obj;
   }
 
-  flagChange(event: ViewFlag) {
-    if (event === 'edit') {
-      this.flag = 'edit';
-    } else if (event === 'profile') {
-      this.flag = 'profile';
-    }
-  }
   cancel() {
     this._drawer.close();
     this.flag = null;

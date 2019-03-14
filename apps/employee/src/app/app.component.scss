@@ -1,5 +1,5 @@
 mat-sidenav {
-  width: 200px;
+  width: 320px;
 
 }
 
@@ -7,9 +7,6 @@ mat-sidenav {
   height: 100vh;
 }
 
-ul{
-  list-style: none;
-}
-ul.sideNav li{
-  padding: 10px;
+.sideNavLink{
+  text-decoration : none;
 }

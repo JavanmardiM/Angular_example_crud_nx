@@ -13,10 +13,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { EmployeeListComponent } from './employee/employee-list/employee-list.component';
 import { AttendanceComponent } from './employee/attendance/attendance.component';
 import { ArchivedListComponent } from './employee/archived-list/archived-list.component';
+import { LoginComponent } from './employee/login/login.component';
 
 const appRoutes: Routes = [
-  { path: '', component: EmployeeListComponent },
+  { path: '', component: LoginComponent },
   { path: 'attendance', component: AttendanceComponent },
+  { path: 'employeeList', component: EmployeeListComponent },
   { path: 'archive', component: ArchivedListComponent },
   { path: '**', redirectTo: ''}
 

@@ -83,6 +83,6 @@ export class ArchivedListComponent  implements OnInit, AfterViewInit {
     this.getEmployees();
   }
   back(){
-    this.router.navigate(['/']);
+    this.router.navigate(['/employeeList']);
   }
 }
