@@ -1,0 +1,12 @@
+<h4>{{data.dialogTitle}}</h4>
+<div fxLayout="column" fxLayoutGap="30px">
+    <div mat-dialog-content>
+      <p>{{data.contentMsg}}</p>
+
+    </div>
+    <div mat-dialog-actions>
+      <span fxFlex></span>
+      <button mat-button mat-raised-button color="accent" [mat-dialog-close]="data.selectedEmployee" cdkFocusInitial (click)="confirm()" >{{data.confirmButton}}</button>
+      <button mat-button  mat-raised-button color="primary" (click)="cancel()">انصراف</button>
+    </div>
+</div>

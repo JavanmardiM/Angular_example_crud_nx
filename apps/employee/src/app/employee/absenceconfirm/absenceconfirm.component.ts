@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { EmployeeDrawerService, CloseDrawerEvent } from '../services/employee-drawer.service';
-import { EmployeeList, GateOption, EmployeeService } from '../services/employee.service';
+import { AttendanceList, GateOption, EmployeeService } from '../services/employee.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 
@@ -14,7 +14,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AbsenceconfirmComponent {
 
-  @Input() selectedEmployee : EmployeeList;
+  @Input() selectedEmployee : AttendanceList;
   form : FormGroup;
   gateOption : GateOption = {
     employeeId : 0,
@@ -42,7 +42,7 @@ export class AbsenceconfirmComponent {
           this.snackBar.open(`غیبت برای کاربر با شماره پرسنلی ${ID} در سیستم ثبت شد`, 'بستن', {
             duration: 2000,
           });
-          this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<EmployeeList>('absenceconfirm', {
+          this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<AttendanceList>('absenceconfirm', {
             employeeId : this.selectedEmployee.employeeId,
             fullName : this.selectedEmployee.fullName,
             date :this.selectedEmployee.date,
@@ -62,7 +62,8 @@ export class AbsenceconfirmComponent {
   }
 
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent('absenceconfirm'));
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<any>('', null));
+
   }
 
 }

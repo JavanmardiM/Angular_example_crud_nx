@@ -4,7 +4,7 @@ import {
   CloseDrawerEvent
 } from '../services/employee-drawer.service';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { GateOption, EmployeeService, EmployeeList } from '../services/employee.service';
+import { GateOption, EmployeeService, AttendanceList } from '../services/employee.service';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -22,7 +22,7 @@ export class ExitconfirmComponent implements OnInit {
     employeeId:0
   };
 
-  @Input() selectedEmployee : EmployeeList;
+  @Input() selectedEmployee : AttendanceList;
 
   constructor(
     private employeeDrawerService: EmployeeDrawerService,
@@ -45,7 +45,7 @@ export class ExitconfirmComponent implements OnInit {
         this.snackBar.open(`خروج برای کاربر با شماره پرسنلی ${ID} در سیستم ثبت شد`, 'بستن', {
           duration: 2000,
         });
-        this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<EmployeeList>('exitconfirm', {
+        this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<AttendanceList>('exitconfirm', {
           employeeId : this.selectedEmployee.employeeId,
           fullName : this.selectedEmployee.fullName,
           date :this.selectedEmployee.date,
@@ -64,6 +64,7 @@ export class ExitconfirmComponent implements OnInit {
   }
 
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent('exitconfirm'));
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<any>('', null));
+
   }
 }

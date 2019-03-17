@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { moment } from 'moment-jalaali';
 import {MatSnackBar} from '@angular/material';
-import { GateOption, EmployeeService, EmployeeList } from './../services/employee.service';
+import { GateOption, EmployeeService, AttendanceList } from './../services/employee.service';
 import { CloseDrawerEvent } from './../services/employee-drawer.service';
 import { EmployeeDrawerService } from '../services/employee-drawer.service';
 
@@ -21,7 +21,7 @@ export class EnterconfirmComponent{
     employeeId:0,
   };
 
-  @Input() selectedEmployee : EmployeeList;
+  @Input() selectedEmployee : AttendanceList;
   @Output() isEntered = new EventEmitter<boolean>();
   option={hour12:false};
 
@@ -46,8 +46,7 @@ export class EnterconfirmComponent{
           this.snackBar.open(`ورود برای کاربر با شماره پرسنلی ${ID} در سیستم ثبت شد`, 'بستن', {
             duration: 2000,
           });
-          //this.isEntered.emit(true);
-          this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<EmployeeList>('enterconfirm', {
+          this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<AttendanceList>('enterconfirm', {
             employeeId : this.selectedEmployee.employeeId,
             fullName : this.selectedEmployee.fullName,
             date :this.selectedEmployee.date,
@@ -67,6 +66,7 @@ export class EnterconfirmComponent{
   }
 
   cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent('enterconfirm'));
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<any>('', null));
+
   }
 }

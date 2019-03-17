@@ -1,10 +1,26 @@
 <div dir="rtl">
-  <mat-toolbar color="primary">
+  <mat-toolbar  color="primary">
     <button mat-icon-button (click)="sidenav.toggle()">
       <mat-icon>menu</mat-icon>
     </button>
+    <span>سامانه حضور غیاب کارمندان</span>
+    <span fxFlex></span>
 
-    سازمان
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>account_circle</mat-icon>
+        <span>پروفایل کاربری</span>
+      </button>
+      <button mat-menu-item (click)="exit()" >
+        <mat-icon>power_settings_new</mat-icon>
+        <span> خروج از حساب کاربری</span>
+    </button>
+    </mat-menu>
+
+
   </mat-toolbar>
 
   <mat-sidenav-container class="example-container" dir="rtl">

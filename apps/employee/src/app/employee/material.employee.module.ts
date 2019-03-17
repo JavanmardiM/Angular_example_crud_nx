@@ -3,6 +3,7 @@ import {
   MatSidenavModule,
   MatButtonModule,
   MatIconModule,
+  MatIconRegistry,
   MatTableModule,
   MatPaginatorModule,
   MatInputModule,
@@ -42,6 +43,7 @@ const includeModules = [
 @NgModule({
   declarations: [],
   imports: [includeModules],
-  exports: [includeModules]
+  exports: [includeModules],
+  providers: [MatIconRegistry]
 })
 export class MaterialEmployeeModule {}

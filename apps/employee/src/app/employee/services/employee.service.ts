@@ -4,17 +4,17 @@ import { Observable, observable } from 'rxjs';
 
 const API_URL = 'http://localhost:8080';
 
-export const EmptyEmployeeListOption: EmployeeListOpion = {
+export const EmptyEmployeeListOption: ListOpion = {
   date: null,
-  search: null,
-  sortOption: {}
+  searchedText: null,
+  columnSortDirections: {}
 };
 
 @Injectable()
 export class EmployeeService {
   constructor(private http: HttpClient) {}
 
-  sendRequest(option?: EmployeeListOpion): Observable<EmployeesListWithAttendances> {
+  AttendanceList(option?: ListOpion): Observable<EmployeesListWithAttendances> {
     option = option || EmptyEmployeeListOption;
     return this.http.post<EmployeesListWithAttendances>(`${API_URL}/list`, option);
   }
@@ -42,6 +42,24 @@ export class EmployeeService {
   employeeAbsence(emploeeID: number, gateOption: GateOption): Observable<number> {
     return this.http.post<number>(`${API_URL}/api/Employee/${emploeeID}/Absence`, gateOption );
   }
+
+  EmployeeList(option?: ListOpion): Observable<EmployeeListViewModel> {
+    option = option || EmptyEmployeeListOption;
+    return this.http.post<EmployeeListViewModel>(`${API_URL}/api/Employee/EmployeesList`, option);
+  }
+
+  ArchivedEmployeeList(option?: ListOpion): Observable<EmployeeListViewModel> {
+    option = option || EmptyEmployeeListOption;
+    return this.http.post<EmployeeListViewModel>(`${API_URL}/api/Employee/ArchivedEmployeesList`, option);
+  }
+
+  DeleteEmplyoee(emploeeID: number): Observable<number> {
+    return this.http.delete<number>(`${API_URL}/api/Employee/Delete/?employeeId=${emploeeID}`);
+  }
+
+  recoverEmployee(employeeId: number): Observable<any> {
+    return this.http.put<number>(`${API_URL}/api/Employee/Recover/?employeeId=${employeeId}`, null);
+  }
 }
 
 export interface Employee {
@@ -51,7 +69,7 @@ export interface Employee {
   address: string;
   employeeId?: string;
 }
-export interface EmployeeList {
+export interface AttendanceList {
   employeeId: number;
   fullName: string;
   date: string;
@@ -59,22 +77,38 @@ export interface EmployeeList {
   exitTime: string;
   description: string[];
   isAbsence: boolean;
+  isDeleted?:boolean;
 }
-export interface EmployeesListWithAttendances{
-  employeesListWithAttendances : EmployeeList[];
-  totalCount : number;
+export interface EmployeesListWithAttendances {
+  employeesListWithAttendances: AttendanceList[];
+  totalCount: number;
+}
+
+export interface EmployeeListViewModel {
+  employeeList: EmployeeList[];
+  totalCount: number;
+}
+
+export interface EmployeeList {
+  employeeId: number;
+  fullName: string;
+  nationalCode: string;
+  mobileNumber: string;
+  address: string;
+  archiveOrRecoverDate?: string;
 }
 
 export interface SortOption {
   [key: string]: string;
 }
 
-export interface EmployeeListOpion {
+export interface ListOpion {
   date?: string;
-  search?: string;
-  sortOption?: SortOption;
+  searchedText?: string;
+  columnSortDirections?: SortOption;
   pageId?: number;
   recordsPerPage?: number;
+  displayArchivedEmployees? :boolean;
 }
 
 export interface EmploeeProfile {

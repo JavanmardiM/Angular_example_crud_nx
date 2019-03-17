@@ -1,17 +1,17 @@
-import { EmployeeListOpion, EmployeesListWithAttendances } from './../services/employee.service';
-import { EmployeeService,  EmployeeList} from '../services/employee.service';
+import { ListOpion, EmployeesListWithAttendances } from '../services/employee.service';
+import { EmployeeService,  AttendanceList} from '../services/employee.service';
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, delay } from 'rxjs/operators';
 
-export class EmployeeDatasource extends DataSource<EmployeeList> {
-  private employeesSubject = new BehaviorSubject<EmployeeList[]>([]);
+export class AttendanceDatasource extends DataSource<AttendanceList> {
+  private employeesSubject = new BehaviorSubject<AttendanceList[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private totalCountSubject = new BehaviorSubject<number>(0);
 
   connect(
     collectionViewer: CollectionViewer
-  ): Observable<EmployeeList[] | ReadonlyArray<EmployeeList>> {
+  ): Observable<AttendanceList[] | ReadonlyArray<AttendanceList>> {
     return this.employeesSubject.asObservable();
   }
 
@@ -31,13 +31,13 @@ export class EmployeeDatasource extends DataSource<EmployeeList> {
     super();
   }
 
-  addEmployeeItem(employeeRecord: EmployeeList){
+  addEmployeeItem(employeeRecord: AttendanceList){
     const oldEmployeeList = this.employeesSubject.value;
     const newEmployeeList = [...oldEmployeeList,employeeRecord];
     this.employeesSubject.next(newEmployeeList);
   }
 
-  updateEmployeeList(index , employeeRecord:EmployeeList){
+  updateEmployeeList(index , employeeRecord:AttendanceList){
     const oldEmployeeList = [...this.employeesSubject.value];
     oldEmployeeList[index] = employeeRecord;
     this.employeesSubject.next(oldEmployeeList);
@@ -48,12 +48,10 @@ export class EmployeeDatasource extends DataSource<EmployeeList> {
     return employees.findIndex(e => e.employeeId === id);
   }
 
-  loadEmployees(option?: EmployeeListOpion) {
+  loadEmployeesAttendanceList(option?: ListOpion) {
     this.loadingSubject.next(true);
-
-
     this.employeeService
-      .sendRequest(option)
+      .AttendanceList(option)
       .pipe(
         delay(500),//if using table loader spinner
         finalize(() => this.loadingSubject.next(false)),
@@ -67,4 +65,5 @@ export class EmployeeDatasource extends DataSource<EmployeeList> {
         () => {}
       );
   }
+
 }

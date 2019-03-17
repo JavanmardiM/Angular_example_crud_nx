@@ -67,12 +67,8 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  cancel(): void {
-    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<Employee>('register', null));
-  }
-
-  openSnackBar(message: string, action: string) {
-
+  cancel(){
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<any>('', null));
   }
 
 }
