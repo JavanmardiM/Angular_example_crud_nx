@@ -9,7 +9,7 @@
       background-color: mat-color($primary,200,0.1);
     }
     .disabledWarn{
-      background-color: mat-color($warn,200,0.1);
+      background-color: mat-color($warn,200,0.3);
     }
     .disabledPrimary{
       background-color: mat-color($primary,200,0.1);
@@ -17,5 +17,7 @@
     .disabledAccent{
       background-color: mat-color($accent,200,0.1);
     }
+
+
   }
 }

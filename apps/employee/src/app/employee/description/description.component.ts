@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { EmployeeList } from '../services/employee.service';
+import { AttendanceList } from '../services/employee.service';
 
 @Component({
   selector: 'angular-nx-description',
@@ -11,7 +11,7 @@ import { EmployeeList } from '../services/employee.service';
 })
 export class DescriptionComponent implements OnInit {
 
-  @Input() selectedEmployee : EmployeeList;
+  @Input() selectedEmployee : AttendanceList;
   desc:description;
 
   constructor() {}

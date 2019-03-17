@@ -14,7 +14,7 @@
            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
           </mat-form-field>
 
-            <button mat-button mat-raised-button color="accent" [style.height.px]="50">ورود</button>
+            <button mat-button mat-raised-button color="accent" [style.height.px]="50" (click)="submit()">ورود</button>
             <button mat-button mat-raised-button color="primary"[style.height.px]="50" >انصراف</button>
 
         </form>

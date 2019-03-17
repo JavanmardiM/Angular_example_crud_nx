@@ -15,7 +15,7 @@ import { EnterconfirmComponent } from './enterconfirm/enterconfirm.component';
 import { ExitconfirmComponent } from './exitconfirm/exitconfirm.component';
 import { AbsenceconfirmComponent } from './absenceconfirm/absenceconfirm.component';
 import { EmployeeDrawerService } from './services/employee-drawer.service';
-import { MatPaginatorIntl } from '@angular/material';
+import { MatPaginatorIntl, MatIconRegistry } from '@angular/material';
 import { DescriptionComponent } from './description/description.component';
 
 import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
@@ -23,6 +23,7 @@ import { PersianDatePipe } from './persian-date.pipe';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { ArchivedListComponent } from './archived-list/archived-list.component';
 import { LoginComponent } from './login/login.component';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { LoginComponent } from './login/login.component';
     EmployeeListComponent,
     ArchivedListComponent,
     LoginComponent,
+    DialogComponent,
   ],
   imports: [
     CommonModule,
@@ -59,6 +61,18 @@ import { LoginComponent } from './login/login.component';
     ViewprofileComponent,
     EnterconfirmComponent,
     DescriptionComponent
+  ],
+  entryComponents:[
+    DialogComponent
   ]
 })
-export class EmployeeModule {}
+export class EmployeeModule {
+  constructor(
+    public matIconRegistry: MatIconRegistry) {
+    matIconRegistry.registerFontClassAlias('fontawesome', 'fa');
+    matIconRegistry.registerFontClassAlias('fontawesome', 'fas');
+    matIconRegistry.registerFontClassAlias('fontawesome', 'fal');
+    matIconRegistry.registerFontClassAlias('fontawesome', 'fab');
+    matIconRegistry.registerFontClassAlias('fontawesome', 'far');
+    }
+}

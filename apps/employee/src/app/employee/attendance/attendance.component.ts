@@ -1,9 +1,9 @@
-import {  EmployeeService,  EmployeeListOpion,  EmptyEmployeeListOption,  EmployeeList,  SortOption,  Employee,} from './../services/employee.service';
+import {  EmployeeService,  ListOpion,  EmptyEmployeeListOption,  AttendanceList,  SortOption,  Employee,} from './../services/employee.service';
 import {  Component,  OnInit,  ViewChild,  ElementRef,  AfterViewInit,} from '@angular/core';
 import {  MatPaginator,  MatSort,  MatDrawer,  MatPaginatorIntl} from '@angular/material';
 import {  EmployeeDrawerService, DrawerEvent,} from '../services/employee-drawer.service';
 import moment from 'moment-jalaali';
-import { EmployeeDatasource } from './employees.datasource';
+import { AttendanceDatasource } from './attendance.datasource';
 
 type ViewFlag =  | null  | 'edit'  | 'profile'  | 'enterconfirm'  | 'exitconfirm'  | 'absence'  | 'desc';
 
@@ -15,7 +15,8 @@ type ViewFlag =  | null  | 'edit'  | 'profile'  | 'enterconfirm'  | 'exitconfirm
     'class' : 'angular-nx-attendance'
   }
 })
-export class AttendanceComponent implements OnInit, AfterViewInit {
+export class AttendanceComponent implements OnInit {
+
   @ViewChild('sidecontent')
   public set drawer(drawer: MatDrawer) {
     this._drawer = drawer;
@@ -27,14 +28,15 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
 
   columnName: string;
   sortDir: string;
-  employeesDatasource: EmployeeDatasource;
+  employeesDatasource: AttendanceDatasource;
   employeeID: number;
   selectedDate: string = moment().format('jYYYY/jM/jDD');
   sortOpt: SortOption
-  employeeListOption: EmployeeListOpion = EmptyEmployeeListOption;
+  employeeListOption: ListOpion = EmptyEmployeeListOption;
   flag: ViewFlag = null;
-  selectedEmployee : EmployeeList;
+  selectedEmployee : AttendanceList;
   isToday :boolean;
+  showArchived : boolean = false;
 
   displayedColumns: string[] = ['number','employeeId','fullname','date','enterTime','exitTime', 'des','opration'  ];
 
@@ -49,15 +51,15 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.employeesDatasource = new EmployeeDatasource(this.employeeService);
+    this.employeesDatasource = new AttendanceDatasource(this.employeeService);
 
     let updatedEmployee ;
     let employeeIndex;
 
     this.employeeDrawerService.drawerClosed().subscribe(
       (closedEvent:DrawerEvent<any>) => {
-       if(closedEvent.target=== 'enterconfirm' || 'exitconfirm' || 'absenceconfirm') {
-          updatedEmployee = closedEvent.getPayload<EmployeeList>();
+       if(closedEvent.target === 'enterconfirm' || closedEvent.target ===  'exitconfirm' || closedEvent.target ===  'absenceconfirm') {
+          updatedEmployee = closedEvent.getPayload<AttendanceList>();
           employeeIndex = this.employeesDatasource.getEmployeeIndexById(updatedEmployee.employeeId);
           this.employeesDatasource.updateEmployeeList(employeeIndex,updatedEmployee );
           }
@@ -71,12 +73,10 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
       .drawerOpened()
       .subscribe(opendEvent => this._drawer.open());
 
-    this.getEmployees();
+      this.getEmployees();
   }
 
-  ngAfterViewInit() {
-    this.getEmployees();
-  }
+
 
   sortHeaderClick(headerName: string) {
     if (headerName) {
@@ -96,12 +96,13 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
   }
 
   getEmployees() {
-    this.employeesDatasource.loadEmployees({
+    this.employeesDatasource.loadEmployeesAttendanceList({
       date: moment(this.selectedDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD'),
-      search: this.input.nativeElement.value,
-      sortOption: this.sortOpt,
-      pageId:this.paginator.pageIndex,
-      recordsPerPage : this.paginator.pageSize
+      searchedText: this.input.nativeElement.value,
+      columnSortDirections: this.sortOpt,
+      pageId:this.paginator.pageIndex+1,
+      recordsPerPage : this.paginator.pageSize,
+      displayArchivedEmployees : this.showArchived
     });
   }
 
@@ -112,6 +113,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
       this.prevDate = newDate;
 
       this.getEmployees();
+
     }
   }
 
@@ -119,29 +121,29 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this.selectedDate = moment().format('jYYYY/jM/jDD');
   }
 
-  onexitconfirm(obj: EmployeeList) {
+  onexitconfirm(obj: AttendanceList) {
     this.flag = 'exitconfirm';
     this._drawer.toggle();
     this.selectedEmployee = obj;
   }
 
-  onenterconfirm(obj: EmployeeList) {
+  onenterconfirm(obj: AttendanceList) {
     this.flag = 'enterconfirm';
     this._drawer.toggle();
     this.selectedEmployee = obj;
   }
-  profile(obj: EmployeeList) {
+  profile(obj: AttendanceList) {
     this.flag = 'profile';
     this._drawer.toggle();
     this.employeeID = obj.employeeId;
     this.selectedEmployee = obj;
   }
-  onabsence(obj: EmployeeList) {
+  onabsence(obj: AttendanceList) {
     this.flag = 'absence';
     this._drawer.toggle();
     this.selectedEmployee = obj;
   }
-  desc(obj: EmployeeList) {
+  desc(obj: AttendanceList) {
     this.flag = 'desc';
     this._drawer.toggle();
     this.selectedEmployee = obj;
@@ -161,8 +163,7 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getNext(event){
-    console.log(event);
+  NextPage(event){
     this.getEmployees();
 
   }
@@ -171,6 +172,13 @@ export class AttendanceComponent implements OnInit, AfterViewInit {
     this.input.nativeElement.value='';
     this.getEmployees();
   }
+
+  checkboxChange(event){
+    this.showArchived = event.checked;
+    this.getEmployees();
+  }
+
+
 }
 
 export class MatPaginatorIntlCro extends MatPaginatorIntl {
@@ -184,7 +192,7 @@ export class MatPaginatorIntlCro extends MatPaginatorIntl {
     }
     length = Math.max(length, 0);
     const startIndex = page * pageSize;
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
+
     const endIndex =
       startIndex < length
         ? Math.min(startIndex + pageSize, length)

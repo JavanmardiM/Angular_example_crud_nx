@@ -1,7 +1,8 @@
 import {
   EmploeeProfile,
   EmployeeService,
-  EmployeeList
+  AttendanceList,
+  Employee
 } from './../services/employee.service';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import {
@@ -22,9 +23,8 @@ import { TavsysValidators } from '../../validators';
 })
 export class EditprofileComponent implements OnInit {
 
-  @Output() cancelEdit = new EventEmitter<string>();
-  @Input() public selectedEmployee : EmployeeList;
-  @Output() editedEmployeeInfo : EmploeeProfile;
+
+  @Input() public selectedEmployee : AttendanceList;
 
 
   form: FormGroup;
@@ -75,16 +75,16 @@ export class EditprofileComponent implements OnInit {
         this.snackBar.open(`  کاربر با شماره پرسنلی ${ID} با موفقیت ویرایش شد`, 'بستن', {
           duration: 2000,
         });
-        this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<EmployeeList>('editprofile',
-        {
-            date:this.selectedEmployee.date ,
-            employeeId: this.selectedEmployee.employeeId,
-            description:this.selectedEmployee.description,
-            enterTime: this.selectedEmployee.enterTime,
-            exitTime: this.selectedEmployee.exitTime,
-            fullName:employeeInfo.fullName,
-            isAbsence: this.selectedEmployee.isAbsence
-        }
+        this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<EmploeeProfile>('editprofile',employeeInfo
+        // {
+        //     date:this.selectedEmployee.date ,
+        //     employeeId: this.selectedEmployee.employeeId,
+        //     description:this.selectedEmployee.description,
+        //     enterTime: this.selectedEmployee.enterTime,
+        //     exitTime: this.selectedEmployee.exitTime,
+        //     fullName:employeeInfo.fullName,
+        //     isAbsence: this.selectedEmployee.isAbsence
+        // }
         ));
       },
       err => {
@@ -97,6 +97,6 @@ export class EditprofileComponent implements OnInit {
   }
 
   cancel() {
-    this.cancelEdit.emit('profile');
+    this.employeeDrawerService.changeDrawerState(new CloseDrawerEvent<any>('', null));
   }
 }

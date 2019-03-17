@@ -1,10 +1,12 @@
+import { EmployeeList } from './../services/employee.service';
 import  * as moment  from 'moment-jalaali';
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Inject } from '@angular/core';
-import { EmployeeList, SortOption, EmployeeListOpion, EmptyEmployeeListOption, EmployeeService, Employee } from '../services/employee.service';
-import { MatDrawer, MatPaginator, MatSort, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { EmployeeDatasource } from '../attendance/employees.datasource';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { AttendanceList, SortOption, ListOpion, EmptyEmployeeListOption, EmployeeService, Employee } from '../services/employee.service';
+import { MatDrawer, MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { EmployeeDrawerService, DrawerEvent } from '../services/employee-drawer.service';
 import { Router } from '@angular/router';
+import { DialogComponent } from '../dialog/dialog.component';
+import { EmployeeListDatasource } from './employee-list.datasource';
 
 type ViewFlag =  | null  | 'edit'   | 'register' ;
 
@@ -13,7 +15,7 @@ type ViewFlag =  | null  | 'edit'   | 'register' ;
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
-export class EmployeeListComponent implements OnInit, AfterViewInit {
+export class EmployeeListComponent implements OnInit {
   @ViewChild('sidecontent')
   public set drawer(drawer: MatDrawer) {
     this._drawer = drawer;
@@ -25,13 +27,13 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
 
   columnName: string;
   sortDir: string;
-  employeesDatasource: EmployeeDatasource;
+  employeesDatasource: EmployeeListDatasource;
   employeeID: number;
   selectedDate: string = moment().format('jYYYY/jM/jDD');
   sortOpt: SortOption
-  employeeListOption: EmployeeListOpion = EmptyEmployeeListOption;
+  employeeListOption: ListOpion = EmptyEmployeeListOption;
   flag: ViewFlag = null;
-  selectedEmployee : EmployeeList;
+  selectedEmployee : AttendanceList;
   isToday :boolean;
 
   displayedColumns: string[] = ['number','employeeId','fullname', 'nationalCode' , 'mobileNumber' , 'address' ,'opration' ];
@@ -45,11 +47,11 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     private employeeService: EmployeeService,
     private employeeDrawerService: EmployeeDrawerService,
     private router : Router,
-    public dialog: MatDialog
+    public dialog : MatDialog
   ) {}
 
   ngOnInit() {
-    this.employeesDatasource = new EmployeeDatasource(this.employeeService);
+    this.employeesDatasource = new EmployeeListDatasource(this.employeeService);
 
     let updatedEmployee ;
     let employeeIndex;
@@ -60,17 +62,15 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
           const registeredEmployee = closedEvent.getPayload<Employee>();
 
           this.employeesDatasource.addEmployeeItem({
-            date: moment(this.selectedDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD'),
             employeeId: parseInt(registeredEmployee.employeeId, 10),
-            description:['','',''],
-            enterTime: null,
-            exitTime: null,
             fullName: String(registeredEmployee.fullName),
-            isAbsence: false
+            address: String(registeredEmployee.address),
+            mobileNumber: String(registeredEmployee.mobileNumber),
+            nationalCode: String(registeredEmployee.nationalCode)
           });
          }
           else if(closedEvent.target=== 'editprofile') {
-          updatedEmployee = closedEvent.getPayload<EmployeeList>();
+          updatedEmployee = closedEvent.getPayload<Employee>();
           employeeIndex = this.employeesDatasource.getEmployeeIndexById(updatedEmployee.employeeId);
           this.employeesDatasource.updateEmployeeList(employeeIndex,updatedEmployee );
           }
@@ -80,16 +80,17 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
       }
     );
 
-    this.employeeDrawerService
-      .drawerOpened()
-      .subscribe(opendEvent => this._drawer.open());
+    this.employeeDrawerService.drawerOpened().subscribe(opendEvent => this._drawer.open());
 
-    this.getEmployees();
+      this.employeesDatasource.loadEmployeeList({
+        searchedText: this.input.nativeElement.value,
+        columnSortDirections: this.sortOpt,
+        pageId:this.paginator.pageIndex,
+        recordsPerPage : this.paginator.pageSize
+      });
   }
 
-  ngAfterViewInit() {
-    this.getEmployees();
-  }
+
 
   sortHeaderClick(headerName: string) {
     if (headerName) {
@@ -109,13 +110,13 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   }
 
   getEmployees() {
-    this.employeesDatasource.loadEmployees({
-     date: moment(this.selectedDate, 'jYYYY/jMM/jDD').format('YYYY/MM/DD'),
-      search: this.input.nativeElement.value,
-      sortOption: this.sortOpt,
-      pageId:this.paginator.pageIndex,
-      recordsPerPage : this.paginator.pageSize
+    this.employeesDatasource.loadEmployeeList({
+      searchedText: this.input.nativeElement.value,
+      columnSortDirections: this.sortOpt,
+      pageId:this.paginator.pageIndex+1,
+      recordsPerPage : this.paginator.pageSize,
     });
+
   }
 
   prevDate: string;
@@ -135,16 +136,12 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.flag = 'register';
     this._drawer.toggle();
   }
-  edit(obj: EmployeeList){
+  edit(obj: AttendanceList){
     this.flag = 'edit';
     this._drawer.toggle();
     this.selectedEmployee = obj;
   }
-  flagChange(event: ViewFlag) {
-    if (event === 'edit') {
-      this.flag = 'edit';
-    }
-  }
+
   cancel() {
     this._drawer.close();
     this.flag = null;
@@ -157,8 +154,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
       this.getEmployees();
     }
   }
-  getNext(event){
-    console.log(event);
+  NextPage(event){
     this.getEmployees();
 
   }
@@ -170,40 +166,31 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/archive']);
   }
 
-  openDialog(): void {
-    // const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-    //   width: '250px',
-    //   data: {name: this.name, animal: this.animal}
-    // });
+  openDialog(employee : EmployeeList): void {
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   console.log('The dialog was closed');
-    //   this.animal = result;
-    // });
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '350px',
+      height : '250px',
+      data: {selectedEmployee: employee.employeeId, dialogTitle:'تایید حذف کارمند', confirmButton:'حذف',contentMsg:`کارمند با شماره پرسنلی ${employee.employeeId} حذف شود؟`,dataSource:this.employeesDatasource},
+      direction:'rtl'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+     if(result){
+      this.employeeService.DeleteEmplyoee(employee.employeeId).subscribe();
+      const index = this.employeesDatasource.getEmployeeIndexById(employee.employeeId);
+      this.employeesDatasource.deleteEmployeeItem(index);
+     }
+    });
   }
 
+
+
 }
 
-// @Component({
-//   selector: 'dialog-overview-example-dialog',
-//   templateUrl: 'dialog-overview-example-dialog.html',
-// })
-// export class DialogOverviewExampleDialog {
 
-//   constructor(
-//     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-//     @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 
-//   onNoClick(): void {
-//     this.dialogRef.close();
-//   }
 
-// }
-
-export interface DialogData {
-  animal: string;
-  name: string;
-}
 
 
 
