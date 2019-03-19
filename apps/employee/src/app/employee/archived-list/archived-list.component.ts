@@ -4,6 +4,7 @@ import { MatPaginator, MatSort, MatDialog } from '@angular/material';
 import { SortOption, EmptyEmployeeListOption, ListOpion, AttendanceList, EmployeeService, EmployeeList } from '../services/employee.service';
 import { Router } from '@angular/router';
 import { DialogComponent } from '../dialog/dialog.component';
+import { PromptService } from '@angular-nx/prompt';
 
 @Component({
   selector: 'angular-nx-archived-list',
@@ -32,7 +33,8 @@ export class ArchivedListComponent  implements OnInit{
   constructor(
     private employeeService: EmployeeService,
     private router : Router,
-    private dialog : MatDialog
+    private dialog : MatDialog,
+    private promptService: PromptService,
   ) {}
 
   ngOnInit() {
@@ -91,24 +93,25 @@ export class ArchivedListComponent  implements OnInit{
     this.getEmployees();
   }
   back(){
-    this.router.navigate(['/employeeList']);
+    this.router.navigate(['/employee/employeeList']);
   }
 
   openDialog(employee : EmployeeList): void {
 
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
-      height : '250px',
-      data: {selectedEmployee: employee.employeeId, dialogTitle:'تایید بازیابی کارمند', confirmButton:'بازیابی',contentMsg:`کارمند با شماره پرسنلی ${employee.employeeId} بازیابی شود؟`},
-      direction:'rtl'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result){
+    this.promptService
+    .open(
+      `  کارمند با کد پرسنلی ${employee.employeeId}  بازیابی شود ؟`,
+      'بازیابی کارمند',
+      'بازیابی',
+      'لغو'
+    )
+    .subscribe(result => {
+      if (result) {
         this.employeeService.recoverEmployee(employee.employeeId).subscribe();
         const index = this.employeesDatasource.getEmployeeIndexById(employee.employeeId);
         this.employeesDatasource.deleteEmployeeItem(index);
       }
-    });
+    }, console.log.bind(console));
   }
+
 }

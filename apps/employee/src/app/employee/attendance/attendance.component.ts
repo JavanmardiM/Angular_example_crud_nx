@@ -77,7 +77,6 @@ export class AttendanceComponent implements OnInit {
   }
 
 
-
   sortHeaderClick(headerName: string) {
     if (headerName) {
       this.columnName = headerName;

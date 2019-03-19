@@ -1,5 +1,4 @@
 import { EmployeeList } from './../services/employee.service';
-import  * as moment  from 'moment-jalaali';
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AttendanceList, SortOption, ListOpion, EmptyEmployeeListOption, EmployeeService, Employee } from '../services/employee.service';
 import { MatDrawer, MatPaginator, MatSort, MatDialog } from '@angular/material';
@@ -7,6 +6,7 @@ import { EmployeeDrawerService, DrawerEvent } from '../services/employee-drawer.
 import { Router } from '@angular/router';
 import { DialogComponent } from '../dialog/dialog.component';
 import { EmployeeListDatasource } from './employee-list.datasource';
+import { PromptService } from '@angular-nx/prompt';
 
 type ViewFlag =  | null  | 'edit'   | 'register' ;
 
@@ -29,12 +29,10 @@ export class EmployeeListComponent implements OnInit {
   sortDir: string;
   employeesDatasource: EmployeeListDatasource;
   employeeID: number;
-  selectedDate: string = moment().format('jYYYY/jM/jDD');
   sortOpt: SortOption
   employeeListOption: ListOpion = EmptyEmployeeListOption;
   flag: ViewFlag = null;
   selectedEmployee : AttendanceList;
-  isToday :boolean;
 
   displayedColumns: string[] = ['number','employeeId','fullname', 'nationalCode' , 'mobileNumber' , 'address' ,'opration' ];
 
@@ -47,7 +45,8 @@ export class EmployeeListComponent implements OnInit {
     private employeeService: EmployeeService,
     private employeeDrawerService: EmployeeDrawerService,
     private router : Router,
-    public dialog : MatDialog
+    public dialog : MatDialog,
+    private promptService: PromptService,
   ) {}
 
   ngOnInit() {
@@ -119,19 +118,6 @@ export class EmployeeListComponent implements OnInit {
 
   }
 
-  prevDate: string;
-  onDateChange(newDate) {
-    this.isToday = this.selectedDate === moment().format('jYYYY/jM/jDD') ? true : false;
-    if (this.prevDate !== newDate) {
-      this.prevDate = newDate;
-
-      this.getEmployees();
-    }
-  }
-
-  gotoToday() {
-   this.selectedDate = moment().format('jYYYY/jM/jDD');
-  }
   onReg() {
     this.flag = 'register';
     this._drawer.toggle();
@@ -163,25 +149,25 @@ export class EmployeeListComponent implements OnInit {
     this.getEmployees();
   }
   archivedList(){
-    this.router.navigate(['/archive']);
+    this.router.navigate(['/employee/archive']);
   }
 
   openDialog(employee : EmployeeList): void {
 
-    const dialogRef = this.dialog.open(DialogComponent, {
-      width: '350px',
-      height : '250px',
-      data: {selectedEmployee: employee.employeeId, dialogTitle:'تایید حذف کارمند', confirmButton:'حذف',contentMsg:`کارمند با شماره پرسنلی ${employee.employeeId} حذف شود؟`,dataSource:this.employeesDatasource},
-      direction:'rtl'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-     if(result){
-      this.employeeService.DeleteEmplyoee(employee.employeeId).subscribe();
-      const index = this.employeesDatasource.getEmployeeIndexById(employee.employeeId);
-      this.employeesDatasource.deleteEmployeeItem(index);
-     }
-    });
+    this.promptService
+    .open(
+      `  کارمند با کد پرسنلی ${employee.employeeId} را حذف شود؟`,
+      'حذف کارمند',
+      'حذف',
+      'لغو'
+    )
+    .subscribe(result => {
+      if (result) {
+        this.employeeService.DeleteEmplyoee(employee.employeeId).subscribe();
+        const index = this.employeesDatasource.getEmployeeIndexById(employee.employeeId);
+        this.employeesDatasource.deleteEmployeeItem(index);
+      }
+    }, console.log.bind(console));
   }
 
 
