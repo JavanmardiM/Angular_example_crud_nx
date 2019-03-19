@@ -19,27 +19,19 @@
       <div fxLayout="row">
         <mat-card-title>لیست کارمندان ثبت شده</mat-card-title>
       </div>
-      <mat-card-content>
+      <mat-card-content [style.marginTop.px]="20">
         <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="24px" fxLayout.lt-md="column">
-          <mat-form-field>
-            <tav-persian-datepicker fxLayout="row" #picker [(ngModel)]="selectedDate" (ngModelChange)="onDateChange($event)" placeholder="انتخاب تاریخ"></tav-persian-datepicker>
-            <tav-persian-datepicker-toggle
-              fxLayout="row" fxFlex="20"fxLayoutAlign="start end" [for]="picker" ></tav-persian-datepicker-toggle>
-          </mat-form-field>
-          <div>
-            <button mat-raised-button color="primary" (click)="gotoToday()">
-              برو به امروز
-            </button>
-          </div>
+
+          <mat-form-field  appearance="outline"[style.width.px]="300">
+             <mat-label>جستجو </mat-label>
+             <input #input matInput placeholder="جستجو" (keydown)="search($event)"/>
+             <button matSuffix mat-icon-button *ngIf="input.value!=''" (click)="searchButton()">
+                <mat-icon [style.fontSize.%]="100">close</mat-icon>
+             </button>
+           </mat-form-field>
           <span fxFlex></span>
           <div fxLayoutGap="10px">
-            <mat-form-field>
-              <mat-label>جستجو </mat-label>
-              <input #input matInput placeholder="جستجو" (keydown)="search($event)"/>
-              <button matSuffix mat-icon-button *ngIf="input.value!=''" (click)="searchButton()">
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-form-field>
+
             <button mat-raised-button color="primary" (click)="onReg()">
               ثبت کارمند جدید
               <mat-icon matPrefix>person_add</mat-icon>

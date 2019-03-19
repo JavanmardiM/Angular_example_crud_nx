@@ -22,8 +22,9 @@ import { TavsysPersianDatepcikerModule } from "@angular-nx/persian-datepciker";
 import { PersianDatePipe } from './persian-date.pipe';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
 import { ArchivedListComponent } from './archived-list/archived-list.component';
-import { LoginComponent } from './login/login.component';
 import { DialogComponent } from './dialog/dialog.component';
+import { RouterModule } from '@angular/router';
+import { EmployeeRoutes } from './employee.routing';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,6 @@ import { DialogComponent } from './dialog/dialog.component';
     PersianDatePipe,
     EmployeeListComponent,
     ArchivedListComponent,
-    LoginComponent,
     DialogComponent,
   ],
   imports: [
@@ -48,7 +48,8 @@ import { DialogComponent } from './dialog/dialog.component';
     HttpClientModule,
     FlexLayoutModule,
     MaterialEmployeeModule,
-    TavsysPersianDatepcikerModule
+    TavsysPersianDatepcikerModule,
+    RouterModule.forChild(EmployeeRoutes)
   ],
   providers: [
     EmployeeService,

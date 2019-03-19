@@ -1,6 +1,6 @@
 <div dir="rtl">
   <mat-toolbar  color="primary">
-    <button mat-icon-button (click)="sidenav.toggle()">
+    <button mat-icon-button (click)="sidenav.toggle()" tabindex="-1">
       <mat-icon>menu</mat-icon>
     </button>
     <span>سامانه حضور غیاب کارمندان</span>
@@ -10,41 +10,29 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>account_circle</mat-icon>
-        <span>پروفایل کاربری</span>
-      </button>
-      <button mat-menu-item (click)="exit()" >
+      <button mat-menu-item (click)="openDialog()" >
         <mat-icon>power_settings_new</mat-icon>
         <span> خروج از حساب کاربری</span>
     </button>
     </mat-menu>
-
-
   </mat-toolbar>
 
   <mat-sidenav-container class="example-container" dir="rtl">
     <mat-sidenav mode="side" #sidenav position="start">
-      <mat-list  fxLayout="column" fxLayoutGap="10px" [style.padding.px]="15">
-        <mat-list-item>
-          <a class="sideNavLink" [routerLink]="['/attendance']"  >
+      <mat-nav-list fxLayout="column" fxLayoutGap="10px" [style.padding.px]="15">
+        <mat-list-item [routerLink]="['/employee/attendance']">
               <mat-icon>how_to_reg</mat-icon>
               لیست حضور و غیاب
-          </a>
         </mat-list-item>
-        <mat-list-item>
-         <a class="sideNavLink" [routerLink]="['/employeeList']"  >
+        <mat-list-item [routerLink]="['/employee/employeeList']">
               <mat-icon>account_box</mat-icon>
               لیست کارمندان ثبت شده
-          </a>
         </mat-list-item>
-        <mat-list-item>
-          <a class="sideNavLink" [routerLink]="['/archive']"  >
+        <mat-list-item [routerLink]="['/employee/archive']">
               <mat-icon>supervisor_account</mat-icon>
               لیست کارمندان آرشیو شده
-          </a>
         </mat-list-item>
-      </mat-list>
+      </mat-nav-list>
     </mat-sidenav>
 
     <mat-sidenav-content> <router-outlet></router-outlet> </mat-sidenav-content>

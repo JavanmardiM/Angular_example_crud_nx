@@ -13,7 +13,11 @@
     "lib": ["es2017", "dom"],
     "baseUrl": ".",
     "paths": {
-      "@angular-nx/persian-datepciker": ["libs/persian-datepciker/src/index.ts"]
+      "@angular-nx/persian-datepciker": [
+        "libs/persian-datepciker/src/index.ts"
+      ],
+      "@angular-nx/auth": ["libs/auth/src/index.ts"],
+      "@angular-nx/prompt": ["libs/prompt/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

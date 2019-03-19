@@ -1,0 +1,14 @@
+<h4>{{data.title}}</h4>
+<div fxLayout="column" fxLayoutGap="30px">
+    <div mat-dialog-content>
+      <p>{{data.message}}</p>
+
+    </div>
+    <div mat-dialog-actions>
+        <span fxFlex></span>
+        <button mat-button [mat-dialog-close]="false">{{data.btnNegativeLabel || 'خیر'}}</button>
+        <button mat-button color="warn" [mat-dialog-close]="true">{{data.btnPositiveLabel || 'بله'}}</button>
+    </div>
+</div>
+
+

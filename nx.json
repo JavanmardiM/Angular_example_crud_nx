@@ -22,6 +22,12 @@
     },
     "app1-e2e": {
       "tags": []
+    },
+    "auth": {
+      "tags": []
+    },
+    "prompt": {
+      "tags": []
     }
   }
 }
